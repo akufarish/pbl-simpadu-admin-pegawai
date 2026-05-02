@@ -30,3 +30,32 @@ class LoginResponse {
     );
   }
 }
+
+class UserResponse {
+  final String id;
+  final String name;
+  final String email;
+  final String roleName;
+  final String? detailId;
+  final String? imageUrl;
+
+  UserResponse({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.roleName,
+    required this.detailId,
+    required this.imageUrl,
+  });
+
+  factory UserResponse.fromJson(Map<String, dynamic> json) {
+    return UserResponse(
+      id: json["id"],
+      name: json["name"],
+      email: json["email"],
+      roleName: json["role_name"],
+      detailId: json["detail_id"],
+      imageUrl: json["image_url"],
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import 'package:admin_pegawai/models/user.dart';
 import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,16 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   final AuthService authService = AuthService();
+  late Future<UserResponse?> user;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      user = authService.profile();
+    });
+  }
 
   void doLogout() async {
     bool isSuccess = await authService.logout();
@@ -37,13 +48,58 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Text("Wajib Login untuk ngakses halaman ini"),
-            ElevatedButton(onPressed: doLogout, child: Text("Logout")),
-          ],
-        ),
+      body: FutureBuilder<UserResponse?>(
+        future: user,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error: ${snapshot.error}"));
+          } else if (snapshot.hasData && snapshot.data != null) {
+            final user = snapshot.data!;
+            return Padding(
+              padding: EdgeInsetsGeometry.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Hallo"),
+                  SizedBox(height: 16),
+                  Text("Name: ${user.name}"),
+                  Text("Email: ${user.email}"),
+                  Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: doLogout,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                      ),
+                      child: const Text(
+                        "Logout",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Gagal memuat data pengguna."),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: doLogout,
+                    child: const Text("Logout"),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
