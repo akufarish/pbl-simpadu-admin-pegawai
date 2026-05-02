@@ -1,0 +1,68 @@
+import 'dart:convert';
+
+import 'package:admin_pegawai/models/api_response.dart';
+import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/utils/token_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+class AuthService {
+  final String kelompok1Url = dotenv.get("KELOMPOK_1_BASE_URL");
+
+  Future<bool> login(LoginRequest payload) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$kelompok1Url/api/auth/login"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(payload.toJson()),
+      );
+      final jsonResponse = jsonDecode(response.body);
+      debugPrint("Hit api: $jsonResponse");
+
+      if (response.statusCode == 200) {
+        final result = ApiResponse<LoginResponse>.fromJson(
+          jsonResponse,
+          (item) => LoginResponse.fromJson(item),
+        );
+
+        await TokenManager.setToken(
+          result.data!.accessToken,
+          result.data!.refreshToken,
+        );
+
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> logout() async {
+    try {
+      String? token = await TokenManager.getAccessToken();
+      final response = await http.post(
+        Uri.parse("$kelompok1Url/api/auth/logout"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      final jsonResponse = jsonDecode(response.body);
+      debugPrint("Hit api: $jsonResponse");
+
+      if (response.statusCode == 200) {
+        await TokenManager.clearToken();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+}
