@@ -11,6 +11,40 @@ class LoginRequest {
   Map<String, dynamic> toJson() => {'email': email, 'password': password};
 }
 
+class RegisterRequest {
+  final String name;
+  final String email;
+  final String password;
+  final String roleName;
+  final int detailId;
+
+  RegisterRequest({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.roleName,
+    required this.detailId,
+  });
+
+  factory RegisterRequest.fromJson(Map<String, dynamic> json) {
+    return RegisterRequest(
+      name: json["name"],
+      email: json["email"],
+      password: json["password"],
+      roleName: json["role_name"],
+      detailId: json["detail_id"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    "name": name,
+    "email": email,
+    "password": password,
+    "role_name": roleName,
+    "detail_id": detailId,
+  };
+}
+
 class LoginResponse {
   final String accessToken;
   final String refreshToken;

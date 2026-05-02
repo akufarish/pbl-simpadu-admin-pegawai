@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class PegawaiService {
   final String kelompok2Url = dotenv.get("KELOMPOK_2_BASE_URL");
 
-  Future<bool> createPegawai(PegawaiRequest payload) async {
+  Future<PegawaiResponse?> createPegawai(PegawaiRequest payload) async {
     try {
       String? token = await TokenManager.getAccessToken();
       debugPrint("Payload: ${payload.toJson().toString()}");
@@ -35,14 +35,14 @@ class PegawaiService {
           (item) => PegawaiResponse.fromJson(item),
         );
         debugPrint(result.data.toString());
-        return true;
+        return result.data;
       } else {
         debugPrint("samting wong");
-        return false;
+        return null;
       }
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      return null;
     }
   }
 }

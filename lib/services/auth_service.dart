@@ -41,6 +41,33 @@ class AuthService {
     }
   }
 
+  Future<bool> register(RegisterRequest payload) async {
+    try {
+      String? token = await TokenManager.getAccessToken();
+
+      final response = await http.post(
+        Uri.parse("$kelompok1Url/api/user"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(payload.toJson()),
+      );
+      final jsonResponse = jsonDecode(response.body);
+      debugPrint("Hit api: $jsonResponse");
+
+      if (response.statusCode == 200) {
+        debugPrint("Data berhasil ditambahkan");
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   Future<bool> logout() async {
     try {
       String? token = await TokenManager.getAccessToken();

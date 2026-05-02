@@ -1,4 +1,6 @@
 import 'package:admin_pegawai/models/pegawai.dart';
+import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:admin_pegawai/services/pegawai_service.dart';
 import 'package:flutter/material.dart';
 
@@ -23,18 +25,24 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   final _nikController = TextEditingController();
   final _employeeNameController = TextEditingController();
   final _citizenCodeController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  late PegawaiResponse? pegawai;
   bool isLoading = false;
   PegawaiService pegawaiService = PegawaiService();
+  AuthService authService = AuthService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setState(() {
-      _nipController.text = "198503152010111212";
-      _nikController.text = "6371011503850212";
+      _nipController.text = "198503152010211212";
+      _nikController.text = "6371011503852212";
       _employeeNameController.text = "akuasqolani";
       _citizenCodeController.text = "ID";
+      _emailController.text = "akuasq@gmail.com";
+      _passwordController.text = "adminadminadmin";
     });
   }
 
@@ -50,7 +58,7 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
       citizenCode: _citizenCodeController.text,
     );
 
-    bool isSuccess = await pegawaiService.createPegawai(pegawaiRequest);
+    pegawai = await pegawaiService.createPegawai(pegawaiRequest);
 
     setState(() {
       isLoading = false;
@@ -58,19 +66,35 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
 
     if (!mounted) return;
 
-    if (isSuccess) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-          title: Text("Data berhasil ditambahkan!"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Ok"),
-            ),
-          ],
-        ),
+    if (pegawai != null) {
+      RegisterRequest payload = RegisterRequest(
+        name: _employeeNameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        roleName: "dosen",
+        detailId: pegawai!.id.toInt(),
       );
+      bool isSuccess = await authService.register(payload);
+      if (!mounted) return;
+
+      if (isSuccess) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text("Data berhasil ditambahkan!"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Ok"),
+              ),
+            ],
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Samting wong")));
+      }
     } else {
       ScaffoldMessenger.of(
         context,
@@ -98,6 +122,23 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: TextStyle(color: Colors.black),
+                    prefixIcon: Icon(Icons.mail, color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(height: 50),
+              Padding(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: TextField(
                   controller: _nipController,
                   decoration: InputDecoration(
                     labelText: 'NIP',
@@ -115,7 +156,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
-                  obscureText: true,
                   controller: _nikController,
                   decoration: InputDecoration(
                     labelText: 'NIK',
@@ -133,7 +173,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
-                  obscureText: true,
                   controller: _employeeNameController,
                   decoration: InputDecoration(
                     labelText: 'Nama',
@@ -151,7 +190,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
               Padding(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: TextField(
-                  obscureText: true,
                   controller: _citizenCodeController,
                   decoration: InputDecoration(
                     labelText: 'Kewarganegaraan',
