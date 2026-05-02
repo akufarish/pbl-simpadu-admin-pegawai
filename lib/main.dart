@@ -1,5 +1,6 @@
 import 'package:admin_pegawai/screens/dashboard_screen.dart';
 import 'package:admin_pegawai/screens/login_screen.dart';
+import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -29,6 +30,7 @@ class MainApp extends StatelessWidget {
       routes: {
         "/login": (context) => LoginScreen(),
         "/dashboard": (context) => Dashboard(),
+        "/tambah-pegawai": (context) => TambahPegawai(),
       },
     );
   }

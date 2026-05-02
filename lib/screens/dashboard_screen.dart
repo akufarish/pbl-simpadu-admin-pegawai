@@ -66,6 +66,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   SizedBox(height: 16),
                   Text("Name: ${user.name}"),
                   Text("Email: ${user.email}"),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/tambah-pegawai");
+                    },
+                    child: Text("Tambah Pegawai"),
+                  ),
                   Spacer(),
                   SizedBox(
                     width: double.infinity,

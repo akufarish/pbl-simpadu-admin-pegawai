@@ -36,7 +36,7 @@ class UserResponse {
   final String name;
   final String email;
   final String roleName;
-  final String? detailId;
+  final int? detailId;
   final String? imageUrl;
 
   UserResponse({
