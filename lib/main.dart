@@ -2,7 +2,6 @@ import 'package:admin_pegawai/providers/pegawai_provider.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/screens/auth_screen.dart';
 import 'package:admin_pegawai/screens/dashboard_screen.dart';
-import 'package:admin_pegawai/screens/login_screen.dart';
 import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   String? token = await TokenManager.getAccessToken();
-  Widget screen = LoginScreen();
+  Widget screen = AuthScreen();
 
   if (token != null && !JwtDecoder.isExpired(token)) {
     screen = Dashboard();
@@ -40,7 +39,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(body: screen),
       routes: {
-        "/login": (context) => LoginScreen(),
+        "/login": (context) => AuthScreen(),
         "/dashboard": (context) => Dashboard(),
         "/tambah-pegawai": (context) => TambahPegawai(),
       },

@@ -1,4 +1,7 @@
+import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
@@ -19,11 +22,20 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   void _showModal() {
     showModalBottomSheet(
+      isDismissible: false,
+      enableDrag: false,
+      isScrollControlled: true,
       context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          child: Center(child: Text('This is a Modal Bottom Sheet')),
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: const SizedBox(height: 300, child: LoginForm()),
         );
       },
     );
@@ -42,10 +54,123 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image(
+                image: AssetImage("assets/logo/logo.png"),
+                width: 285,
+                height: 285,
+              ),
+              Text(
+                "SIMPADU",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void doLogin() async {
+    final provider = context.read<UserProvider>();
+
+    LoginRequest loginRequest = LoginRequest(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    bool isSuccess = await provider.login(loginRequest);
+
+    if (!mounted) return;
+
+    if (isSuccess) {
+      Navigator.pushReplacementNamed(context, "/dashboard");
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Email atau password salah")));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<UserProvider>();
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(23.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [Text("Logo")],
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Login", style: TextStyle(fontSize: 20)),
+            SizedBox(height: 19),
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                labelStyle: TextStyle(color: Colors.black),
+                prefixIcon: Icon(Icons.mail, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 19),
+            TextField(
+              obscureText: true,
+              controller: _passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                labelStyle: TextStyle(color: Colors.black),
+                prefixIcon: Icon(Icons.lock, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 19),
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: provider.isLoading ? null : doLogin,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  backgroundColor: Colors.blue,
+                ),
+                child: provider.isLoading
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.1
+  flutter_launcher_icons: ^0.14.4
   http: ^1.6.0
   intl: ^0.20.2
   jwt_decoder: ^2.0.1
@@ -25,3 +26,5 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/
+    - assets/logo/
