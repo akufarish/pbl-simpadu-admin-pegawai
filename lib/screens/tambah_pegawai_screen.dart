@@ -1,8 +1,11 @@
 import 'package:admin_pegawai/models/pegawai.dart';
 import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/providers/pegawai_provider.dart';
+import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:admin_pegawai/services/pegawai_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TambahPegawai extends StatelessWidget {
   const TambahPegawai({super.key});
@@ -27,8 +30,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   final _citizenCodeController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  late PegawaiResponse? pegawai;
-  bool isLoading = false;
   PegawaiService pegawaiService = PegawaiService();
   AuthService authService = AuthService();
 
@@ -47,9 +48,8 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   }
 
   void doCreatePegawai() async {
-    setState(() {
-      isLoading = true;
-    });
+    final provider = context.read<PegawaiProvider>();
+    final userProvider = context.read<UserProvider>();
 
     PegawaiRequest pegawaiRequest = PegawaiRequest(
       nip: _nipController.text,
@@ -58,23 +58,19 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
       citizenCode: _citizenCodeController.text,
     );
 
-    pegawai = await pegawaiService.createPegawai(pegawaiRequest);
-
-    setState(() {
-      isLoading = false;
-    });
+    await provider.create(pegawaiRequest);
 
     if (!mounted) return;
 
-    if (pegawai != null) {
+    if (provider.data != null) {
       RegisterRequest payload = RegisterRequest(
         name: _employeeNameController.text,
         email: _emailController.text,
         password: _passwordController.text,
         roleName: "dosen",
-        detailId: pegawai!.id.toInt(),
+        detailId: provider.data!.id.toInt(),
       );
-      bool isSuccess = await authService.register(payload);
+      bool isSuccess = await userProvider.register(payload);
       if (!mounted) return;
 
       if (isSuccess) {
@@ -104,6 +100,8 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<PegawaiProvider>();
+
     return Scaffold(
       body: Container(
         child: Center(
@@ -210,14 +208,14 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: isLoading ? null : doCreatePegawai,
+                    onPressed: provider.isLoading ? null : doCreatePegawai,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       backgroundColor: Colors.blue,
                     ),
-                    child: isLoading
+                    child: provider.isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             "Login",

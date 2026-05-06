@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:admin_pegawai/models/api_response.dart';
 import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/utils/log.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +56,7 @@ class AuthService {
       );
       final jsonResponse = jsonDecode(response.body);
       debugPrint("Hit api: $jsonResponse");
+      log("login", jsonResponse);
 
       if (response.statusCode == 200) {
         debugPrint("Data berhasil ditambahkan");

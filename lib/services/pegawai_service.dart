@@ -20,8 +20,6 @@ class PegawaiService {
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
-          'ngrok-skip-browser-warning': 'true',
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         },
         body: jsonEncode(payload.toJson()),
       );

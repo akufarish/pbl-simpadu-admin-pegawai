@@ -1,6 +1,8 @@
 import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -21,24 +23,18 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool isLoading = false;
+  // bool isLoading = false;
   final AuthService authService = AuthService();
 
   void doLogin() async {
-    setState(() {
-      isLoading = true;
-    });
+    final provider = context.read<UserProvider>();
 
     LoginRequest loginRequest = LoginRequest(
       email: _emailController.text,
       password: _passwordController.text,
     );
 
-    bool isSuccess = await authService.login(loginRequest);
-
-    setState(() {
-      isLoading = false;
-    });
+    bool isSuccess = await provider.login(loginRequest);
 
     if (!mounted) return;
 
@@ -53,6 +49,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<UserProvider>();
+
     return Scaffold(
       body: Container(
         child: Center(
@@ -109,14 +107,14 @@ class _LoginFormState extends State<LoginForm> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: isLoading ? null : doLogin,
+                    onPressed: provider.isLoading ? null : doLogin,
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       backgroundColor: Colors.blue,
                     ),
-                    child: isLoading
+                    child: provider.isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text(
                             "Login",

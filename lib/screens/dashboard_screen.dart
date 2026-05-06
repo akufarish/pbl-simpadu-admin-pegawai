@@ -1,6 +1,8 @@
 import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -32,7 +34,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void doLogout() async {
-    bool isSuccess = await authService.logout();
+    final provider = context.read<UserProvider>();
+    bool isSuccess = await provider.logout();
 
     if (!mounted) return;
 
