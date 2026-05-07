@@ -1,6 +1,6 @@
 import 'package:admin_pegawai/models/user.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
-import 'package:admin_pegawai/services/auth_service.dart';
+import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,15 +21,14 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final AuthService authService = AuthService();
   late Future<UserResponse?> user;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      user = authService.profile();
+    Future.microtask(() {
+      context.read<UserProvider>().profile();
     });
   }
 
@@ -50,65 +49,135 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final UserProvider userProvider = context.watch<UserProvider>();
+    final UserResponse? user = userProvider.data;
     return Scaffold(
-      body: FutureBuilder<UserResponse?>(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (snapshot.hasData && snapshot.data != null) {
-            final user = snapshot.data!;
-            return Padding(
-              padding: EdgeInsetsGeometry.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Hallo"),
-                  SizedBox(height: 16),
-                  Text("Name: ${user.name}"),
-                  Text("Email: ${user.email}"),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/tambah-pegawai");
-                    },
-                    child: Text("Tambah Pegawai"),
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed: doLogout,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                      ),
-                      child: const Text(
-                        "Logout",
-                        style: TextStyle(color: Colors.white),
+      backgroundColor: AppColors.backgroundColor,
+      body: userProvider.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsetsGeometry.only(top: 48, left: 43, right: 43),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Selamat Datang, ${user?.name}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      "Lagi mau ngapain nih?",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    GridView.count(
+                      padding: EdgeInsets.only(top: 24, bottom: 24),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      children: [
+                        CardCount(
+                          icon: Icons.person,
+                          label: "Total Pegawai",
+                          total: 120,
+                        ),
+                        CardCount(
+                          icon: Icons.check_circle_outline,
+                          label: "Pending",
+                          total: 2,
+                        ),
+                        CardCount(
+                          icon: Icons.file_open,
+                          label: "Laporan Masuk",
+                          total: 10,
+                        ),
+                        CardCount(
+                          icon: Icons.person_add_alt_1,
+                          label: "Presensi",
+                          total: 90,
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/tambah-pegawai");
+                      },
+                      child: Text("Tambah Pegawai"),
+                    ),
+                    SizedBox(height: 24),
+
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: doLogout,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text(
+                          "Logout",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 24),
+                  ],
+                ),
               ),
-            );
-          } else {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Gagal memuat data pengguna."),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: doLogout,
-                    child: const Text("Logout"),
-                  ),
-                ],
+            ),
+    );
+  }
+}
+
+class CardCount extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final int total;
+
+  const CardCount({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.total,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 168,
+      height: 160,
+      decoration: BoxDecoration(
+        color: AppColors.secondaryColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(50),
               ),
-            );
-          }
-        },
+              child: Center(
+                child: Icon(icon, color: AppColors.primaryColor, size: 20),
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(color: AppColors.primaryColor, fontSize: 16),
+            ),
+            Text(
+              total.toString(),
+              style: TextStyle(color: AppColors.primaryColor, fontSize: 40),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -70,7 +70,7 @@ class UserResponse {
   final String name;
   final String email;
   final String roleName;
-  final int? detailId;
+  final String? detailId;
   final String? imageUrl;
 
   UserResponse({

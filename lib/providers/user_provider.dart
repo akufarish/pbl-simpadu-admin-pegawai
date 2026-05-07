@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class UserProvider with ChangeNotifier {
   final AuthService authService = AuthService();
   bool isLoading = false;
+  UserResponse? _data;
+  UserResponse? get data => _data;
 
   Future<bool> login(LoginRequest payload) async {
     isLoading = true;
@@ -51,6 +53,20 @@ class UserProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       return false;
+    }
+  }
+
+  Future<void> profile() async {
+    isLoading = false;
+    notifyListeners();
+    try {
+      _data = await authService.profile();
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      debugPrint("$e");
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

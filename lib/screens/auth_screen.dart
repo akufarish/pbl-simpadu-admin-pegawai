@@ -1,5 +1,6 @@
 import 'package:admin_pegawai/models/user.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
+import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
       enableDrag: false,
       isScrollControlled: true,
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.backgroundColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -53,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
       body: Container(
         child: Center(
           child: Column(
@@ -160,7 +162,7 @@ class _LoginFormState extends State<LoginForm> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.primaryColor,
                 ),
                 child: provider.isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
