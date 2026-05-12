@@ -65,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
           : CustomScrollView(
               slivers: [
                 SliverPadding(
-                  padding: EdgeInsets.only(top: 48, left: 43, right: 43),
+                  padding: EdgeInsets.only(top: 48, left: 23, right: 23),
                   sliver: SliverToBoxAdapter(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
 
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 43, vertical: 24),
+                  padding: EdgeInsets.symmetric(horizontal: 23, vertical: 24),
                   sliver: SliverGrid.count(
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
@@ -115,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 43),
+                  padding: EdgeInsets.symmetric(horizontal: 23),
                   sliver: SliverToBoxAdapter(
                     child: Text(
                       "Data verifikasi terbaru",
@@ -125,14 +125,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
 
                 SliverPadding(
-                  padding: EdgeInsets.fromLTRB(43, 22, 43, 20),
+                  padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       final dosen = daftarDosen[index];
                       return Padding(
-                        padding: EdgeInsets.only(
-                          bottom: 16,
-                        ), // Pengganti separator
+                        padding: EdgeInsets.only(bottom: 16),
                         child: VerifikasiCard(
                           nama: dosen["nama"]!,
                           nik: dosen["nik"]!,
