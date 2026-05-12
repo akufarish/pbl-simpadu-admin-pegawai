@@ -59,7 +59,9 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                         Text("Pegawai"),
                         SizedBox(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, "/tambah-pegawai");
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadiusGeometry.circular(10),
@@ -171,7 +173,7 @@ class _SearchFormState extends State<SearchForm> {
   final _namaController = TextEditingController();
   final _nipController = TextEditingController();
 
-  void doLogin() async {}
+  void doSearch() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +222,7 @@ class _SearchFormState extends State<SearchForm> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: doLogin,
+                onPressed: doSearch,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

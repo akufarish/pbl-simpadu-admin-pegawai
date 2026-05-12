@@ -4,6 +4,7 @@ import 'package:admin_pegawai/providers/pegawai_provider.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/services/auth_service.dart';
 import 'package:admin_pegawai/services/pegawai_service.dart';
+import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,8 +28,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   final _nipController = TextEditingController();
   final _nikController = TextEditingController();
   final _employeeNameController = TextEditingController();
-  final _citizenCodeController = TextEditingController();
-  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   PegawaiService pegawaiService = PegawaiService();
   AuthService authService = AuthService();
@@ -41,8 +40,6 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
       _nipController.text = "198503152010211212";
       _nikController.text = "6371011503852212";
       _employeeNameController.text = "akuasqolani";
-      _citizenCodeController.text = "ID";
-      _emailController.text = "akuasq@gmail.com";
       _passwordController.text = "adminadminadmin";
     });
   }
@@ -55,7 +52,7 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
       nip: _nipController.text,
       nik: _nikController.text,
       employeeName: _employeeNameController.text,
-      citizenCode: _citizenCodeController.text,
+      citizenCode: "ID",
     );
 
     await provider.create(pegawaiRequest);
@@ -65,8 +62,8 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
     if (provider.data != null) {
       RegisterRequest payload = RegisterRequest(
         name: _employeeNameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
+        email: "${_nipController.text}@dosen.poliban.ac.id",
+        password: _nipController.text,
         roleName: "dosen",
         detailId: provider.data!.id,
       );
@@ -100,133 +97,100 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.watch<PegawaiProvider>();
+    // final provider = context.watch<PegawaiProvider>();
 
     return Scaffold(
-      body: Container(
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(height: 120),
-              Text("Login", style: TextStyle(fontSize: 34)),
-              SizedBox(height: 20),
-              Text(
-                "Welcome back you've\n been missed!",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
-              ),
-
-              SizedBox(height: 50),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.mail, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+      body: Padding(
+        padding: EdgeInsetsGeometry.fromLTRB(23, 40, 23, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Tambah Pegawai"),
+            SizedBox(height: 16),
+            Card(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(29, 18, 29, 18),
+                child: Column(
+                  children: [
+                    InputGroup(
+                      textEditingController: _employeeNameController,
+                      icon: Icons.person,
+                      label: "Nama Lengkap",
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 50),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _nipController,
-                  decoration: InputDecoration(
-                    labelText: 'NIP',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.mail, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    InputGroup(
+                      textEditingController: _nipController,
+                      icon: Icons.message,
+                      label: "NIP",
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _nikController,
-                  decoration: InputDecoration(
-                    labelText: 'NIK',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.lock, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    InputGroup(
+                      textEditingController: _nikController,
+                      icon: Icons.message,
+                      label: "NIK",
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _employeeNameController,
-                  decoration: InputDecoration(
-                    labelText: 'Nama',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.lock, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  controller: _citizenCodeController,
-                  decoration: InputDecoration(
-                    labelText: 'Kewarganegaraan',
-                    labelStyle: TextStyle(color: Colors.black),
-                    prefixIcon: Icon(Icons.lock, color: Colors.black),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: provider.isLoading ? null : doCreatePegawai,
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      backgroundColor: Colors.blue,
-                    ),
-                    child: provider.isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () => {},
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                  ),
+                          backgroundColor: AppColors.primaryColor,
+                        ),
+                        child: const Text(
+                          "Tambah",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+}
+
+class InputGroup extends StatelessWidget {
+  const InputGroup({
+    super.key,
+    required this.textEditingController,
+    required this.icon,
+    required this.label,
+  });
+
+  final TextEditingController textEditingController;
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 22),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: TextStyle(color: Colors.grey, fontSize: 20)),
+          SizedBox(height: 15),
+          TextField(
+            controller: textEditingController,
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: TextStyle(color: Colors.black),
+              prefixIcon: Icon(icon, color: Colors.black),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
