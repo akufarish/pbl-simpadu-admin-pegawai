@@ -47,6 +47,13 @@ class _DashboardPageState extends State<DashboardPage> {
     }
   }
 
+  final List<Map<String, String>> daftarDosen = [
+    {"nama": "Dosen 1", "nik": "A01239102310293", "status": "Pending"},
+    {"nama": "Dosen 2", "nik": "B01239102310294", "status": "Approved"},
+    {"nama": "Dosen 3", "nik": "C01239102310295", "status": "Pending"},
+    {"nama": "Dosen 4", "nik": "D01239102310296", "status": "Rejected"},
+  ];
+
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = context.watch<UserProvider>();
@@ -55,77 +62,148 @@ class _DashboardPageState extends State<DashboardPage> {
       backgroundColor: AppColors.backgroundColor,
       body: userProvider.isLoading
           ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsetsGeometry.only(top: 48, left: 43, right: 43),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Selamat Datang, ${user?.name}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      "Lagi mau ngapain nih?",
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    GridView.count(
-                      padding: EdgeInsets.only(top: 24, bottom: 24),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
+          : CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: EdgeInsets.only(top: 48, left: 43, right: 43),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CardCount(
-                          icon: Icons.person,
-                          label: "Total Pegawai",
-                          total: 120,
+                        Text(
+                          "Selamat Datang, ${user?.name}",
+                          style: TextStyle(fontSize: 20),
                         ),
-                        CardCount(
-                          icon: Icons.check_circle_outline,
-                          label: "Pending",
-                          total: 2,
-                        ),
-                        CardCount(
-                          icon: Icons.file_open,
-                          label: "Laporan Masuk",
-                          total: 10,
-                        ),
-                        CardCount(
-                          icon: Icons.person_add_alt_1,
-                          label: "Presensi",
-                          total: 90,
+                        Text(
+                          "Lagi mau ngapain nih?",
+                          style: TextStyle(fontSize: 12),
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/tambah-pegawai");
-                      },
-                      child: Text("Tambah Pegawai"),
-                    ),
-                    SizedBox(height: 24),
-
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: doLogout,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                        ),
-                        child: const Text(
-                          "Logout",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 24),
-                  ],
+                  ),
                 ),
-              ),
+
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 43, vertical: 24),
+                  sliver: SliverGrid.count(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 1.1,
+                    children: [
+                      CardCount(
+                        icon: Icons.person,
+                        label: "Total Pegawai",
+                        total: 120,
+                      ),
+                      CardCount(
+                        icon: Icons.check_circle_outline,
+                        label: "Pending",
+                        total: 2,
+                      ),
+                      CardCount(
+                        icon: Icons.file_open,
+                        label: "Laporan Masuk",
+                        total: 10,
+                      ),
+                      CardCount(
+                        icon: Icons.person_add_alt_1,
+                        label: "Presensi",
+                        total: 90,
+                      ),
+                    ],
+                  ),
+                ),
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 43),
+                  sliver: SliverToBoxAdapter(
+                    child: Text(
+                      "Data verifikasi terbaru",
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+
+                SliverPadding(
+                  padding: EdgeInsets.fromLTRB(43, 22, 43, 20),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final dosen = daftarDosen[index];
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: 16,
+                        ), // Pengganti separator
+                        child: VerifikasiCard(
+                          nama: dosen["nama"]!,
+                          nik: dosen["nik"]!,
+                          status: dosen["status"]!,
+                        ),
+                      );
+                    }, childCount: daftarDosen.length),
+                  ),
+                ),
+              ],
             ),
+    );
+  }
+}
+
+class VerifikasiCard extends StatelessWidget {
+  final String nama, nik, status;
+  const VerifikasiCard({
+    super.key,
+    required this.nama,
+    required this.nik,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 354,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: EdgeInsetsGeometry.only(
+          top: 14,
+          left: 23,
+          right: 23,
+          bottom: 20,
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 10,
+              children: [
+                Icon(Icons.account_circle, size: 42),
+                Text(nama),
+                Spacer(),
+                Container(
+                  width: 100,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: status == "Pending" ? Colors.orange : Colors.green,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(status, style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Divider(),
+            SizedBox(height: 14),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [Text("NIK"), Spacer(), Text(nik)],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -168,13 +246,13 @@ class CardCount extends StatelessWidget {
               ),
             ),
             SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(color: AppColors.primaryColor, fontSize: 16),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(label, style: TextStyle(fontSize: 14)),
             ),
-            Text(
-              total.toString(),
-              style: TextStyle(color: AppColors.primaryColor, fontSize: 40),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(total.toString(), style: TextStyle(fontSize: 40)),
             ),
           ],
         ),

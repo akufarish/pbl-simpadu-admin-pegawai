@@ -43,4 +43,24 @@ class PegawaiService {
       return null;
     }
   }
+
+  Future<List<PegawaiResponse>> getDataPegawai() async {
+    String? token = await TokenManager.getAccessToken();
+    final response = await http.get(
+      Uri.parse("$kelompok2Url/api/employees"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    final jsonResponse = jsonDecode(response.body);
+    debugPrint("Data pegawai: $jsonResponse");
+    final result = ApiResponse.fromJsonList<PegawaiResponse>(
+      jsonResponse,
+      (e) => PegawaiResponse.fromJson(e),
+    );
+    debugPrint("Data pegawai: $result");
+    return result.data!;
+  }
 }

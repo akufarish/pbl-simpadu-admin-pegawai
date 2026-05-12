@@ -1,5 +1,5 @@
 class PegawaiResponse {
-  final int id;
+  final String id;
   final String nip;
   final String nik;
   final String employeeName;
@@ -12,10 +12,10 @@ class PegawaiResponse {
   final String? districtCode;
   final String? cityCode;
   final String? provinceCode;
-  final String? village;
-  final String? district;
-  final String? city;
-  final String? province;
+  final Domisili? village;
+  final Domisili? district;
+  final Domisili? city;
+  final Domisili? province;
 
   PegawaiResponse({
     required this.id,
@@ -44,13 +44,13 @@ class PegawaiResponse {
       address: json["address"],
       birthDate: json["birth_date"],
       birthPlace: json["birth_place"],
-      city: json["city"],
+      city: Domisili.fromJson(json["city"]),
       cityCode: json["city_code"],
-      district: json["district"],
+      district: Domisili.fromJson(json["district"]),
       gender: json["gender"],
       nik: json["nik"],
-      province: json["province"],
-      village: json["village"],
+      province: Domisili.fromJson(json["province"]),
+      village: Domisili.fromJson(json["village"]),
       districtCode: json["district_code"],
       employeeName: json["employee_name"],
       phoneNumber: json["phone_number"],
@@ -88,4 +88,16 @@ class PegawaiRequest {
     "citizen_code": citizenCode,
     "employee_name": employeeName,
   };
+}
+
+class Domisili {
+  final String id;
+  final String code;
+  final String name;
+
+  Domisili({required this.id, required this.code, required this.name});
+
+  factory Domisili.fromJson(Map<String, dynamic> json) {
+    return Domisili(id: json["id"], code: json["code"], name: json["name"]);
+  }
 }

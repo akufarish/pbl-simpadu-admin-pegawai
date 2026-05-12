@@ -1,7 +1,6 @@
 import 'package:admin_pegawai/providers/pegawai_provider.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/screens/auth_screen.dart';
-import 'package:admin_pegawai/screens/dashboard_screen.dart';
 import 'package:admin_pegawai/screens/main_screen.dart';
 import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
@@ -41,7 +40,7 @@ class MainApp extends StatelessWidget {
       home: Scaffold(body: screen),
       routes: {
         "/login": (context) => AuthScreen(),
-        "/dashboard": (context) => Dashboard(),
+        "/dashboard": (context) => MainScreen(),
         "/tambah-pegawai": (context) => TambahPegawai(),
       },
     );

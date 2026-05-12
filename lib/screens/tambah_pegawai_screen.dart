@@ -68,7 +68,7 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
         email: _emailController.text,
         password: _passwordController.text,
         roleName: "dosen",
-        detailId: provider.data!.id.toInt(),
+        detailId: provider.data!.id,
       );
       bool isSuccess = await userProvider.register(payload);
       if (!mounted) return;

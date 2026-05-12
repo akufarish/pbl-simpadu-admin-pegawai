@@ -16,7 +16,7 @@ class RegisterRequest {
   final String email;
   final String password;
   final String roleName;
-  final int detailId;
+  final String detailId;
 
   RegisterRequest({
     required this.name,

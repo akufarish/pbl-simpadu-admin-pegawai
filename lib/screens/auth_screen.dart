@@ -89,6 +89,14 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _emailController.text = "tim2@admin.com";
+    _passwordController.text = "pass#tim2";
+  }
+
   void doLogin() async {
     final provider = context.read<UserProvider>();
 

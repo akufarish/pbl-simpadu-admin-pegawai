@@ -8,6 +8,9 @@ class PegawaiProvider with ChangeNotifier {
   PegawaiResponse? _data;
   PegawaiResponse? get data => _data;
 
+  List<PegawaiResponse> _dataPegawai = [];
+  List<PegawaiResponse> get dataPegawai => _dataPegawai;
+
   Future<bool> create(PegawaiRequest payload) async {
     isLoading = true;
     notifyListeners();
@@ -21,6 +24,20 @@ class PegawaiProvider with ChangeNotifier {
       isLoading = false;
       notifyListeners();
       return false;
+    }
+  }
+
+  Future<void> getDataPegawai() async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      _dataPegawai = await pegawaiService.getDataPegawai();
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      debugPrint(e.toString());
+      isLoading = false;
+      notifyListeners();
     }
   }
 }
