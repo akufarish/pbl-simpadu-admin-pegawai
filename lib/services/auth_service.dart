@@ -95,33 +95,23 @@ class AuthService {
     }
   }
 
-  Future<UserResponse?> profile() async {
-    try {
-      String? token = await TokenManager.getAccessToken();
-      final response = await http.get(
-        Uri.parse("$kelompok1Url/api/me"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("Hit api: $jsonResponse");
+  Future<UserResponse> profile() async {
+    String? token = await TokenManager.getAccessToken();
+    final response = await http.get(
+      Uri.parse("$kelompok1Url/api/me"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    final jsonResponse = jsonDecode(response.body);
+    debugPrint("Hit api: $jsonResponse");
 
-      if (response.statusCode == 200) {
-        final result = ApiResponse<UserResponse>.fromJson(
-          jsonResponse,
-          (item) => UserResponse.fromJson(item),
-        );
-        debugPrint(result.data.toString());
-        return result.data;
-      } else {
-        debugPrint("samting wong");
-        return null;
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-      return null;
-    }
+    final result = ApiResponse<UserResponse>.fromJson(
+      jsonResponse,
+      (item) => UserResponse.fromJson(item),
+    );
+    debugPrint(result.data.toString());
+    return result.data!;
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 class UserProvider with ChangeNotifier {
   final AuthService authService = AuthService();
   bool isLoading = false;
-  UserResponse? _data;
-  UserResponse? get data => _data;
+  late UserResponse _data;
+  UserResponse get data => _data;
 
   Future<bool> login(LoginRequest payload) async {
     isLoading = true;
