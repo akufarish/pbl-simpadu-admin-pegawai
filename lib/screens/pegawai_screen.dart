@@ -20,6 +20,27 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
     });
   }
 
+  void _showModal() {
+    showModalBottomSheet(
+      isDismissible: true,
+      enableDrag: true,
+      isScrollControlled: true,
+      context: context,
+      backgroundColor: AppColors.backgroundColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: const SizedBox(height: 300, child: SearchForm()),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final PegawaiProvider pegawaiProvider = context.watch<PegawaiProvider>();
@@ -73,6 +94,14 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                 ),
               ],
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showModal,
+        backgroundColor: AppColors.tertiaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(50),
+        ),
+        child: Icon(Icons.search),
+      ),
     );
   }
 }
@@ -120,6 +149,86 @@ class PegawaiCard extends StatelessWidget {
                 ),
                 child: Text(
                   "View Details",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SearchForm extends StatefulWidget {
+  const SearchForm({super.key});
+
+  @override
+  State<SearchForm> createState() => _SearchFormState();
+}
+
+class _SearchFormState extends State<SearchForm> {
+  final _namaController = TextEditingController();
+  final _nipController = TextEditingController();
+
+  void doLogin() async {}
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(23.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Cari Pegawai",
+              style: TextStyle(fontSize: 20, color: AppColors.primaryColor),
+            ),
+            SizedBox(height: 19),
+            TextField(
+              controller: _namaController,
+              decoration: InputDecoration(
+                labelText: 'Nama Lengkap',
+                labelStyle: TextStyle(color: Colors.black),
+                prefixIcon: Icon(Icons.person, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 19),
+            TextField(
+              controller: _nipController,
+              decoration: InputDecoration(
+                labelText: 'NIP',
+                labelStyle: TextStyle(color: Colors.black),
+                prefixIcon: Icon(Icons.person, color: Colors.black),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 19),
+
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: doLogin,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  backgroundColor: AppColors.primaryColor,
+                ),
+                child: const Text(
+                  "Cari",
                   style: TextStyle(color: Colors.white),
                 ),
               ),
