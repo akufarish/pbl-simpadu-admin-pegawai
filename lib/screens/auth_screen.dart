@@ -88,6 +88,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -98,23 +99,25 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void doLogin() async {
-    final provider = context.read<UserProvider>();
+    if (_formKey.currentState!.validate()) {
+      final provider = context.read<UserProvider>();
 
-    LoginRequest loginRequest = LoginRequest(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
+      LoginRequest loginRequest = LoginRequest(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
 
-    bool isSuccess = await provider.login(loginRequest);
+      bool isSuccess = await provider.login(loginRequest);
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    if (isSuccess) {
-      Navigator.pushReplacementNamed(context, "/dashboard");
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Email atau password salah")));
+      if (isSuccess) {
+        Navigator.pushReplacementNamed(context, "/dashboard");
+      } else {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Email atau password salah")));
+      }
     }
   }
 
@@ -125,62 +128,77 @@ class _LoginFormState extends State<LoginForm> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(23.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Login", style: TextStyle(fontSize: 20)),
-            SizedBox(height: 19),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(color: Colors.black),
-                prefixIcon: Icon(Icons.mail, color: Colors.black),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            SizedBox(height: 19),
-            TextField(
-              obscureText: true,
-              controller: _passwordController,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                labelStyle: TextStyle(color: Colors.black),
-                prefixIcon: Icon(Icons.lock, color: Colors.black),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            SizedBox(height: 19),
-
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: provider.isLoading ? null : doLogin,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Login", style: TextStyle(fontSize: 20)),
+              SizedBox(height: 19),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.black),
+                  prefixIcon: Icon(Icons.mail, color: Colors.black),
+                  border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  backgroundColor: AppColors.primaryColor,
+                  filled: true,
+                  fillColor: Colors.white,
                 ),
-                child: provider.isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Harap masukkan email";
+                  }
+                  return null;
+                },
               ),
-            ),
-          ],
+              SizedBox(height: 19),
+              TextFormField(
+                obscureText: true,
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.black),
+                  prefixIcon: Icon(Icons.lock, color: Colors.black),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Harap masukkan password";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 19),
+
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: provider.isLoading ? null : doLogin,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    backgroundColor: AppColors.primaryColor,
+                  ),
+                  child: provider.isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text(
+                          "Login",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
