@@ -111,7 +111,6 @@ class AuthService {
       jsonResponse,
       (item) => UserResponse.fromJson(item),
     );
-    debugPrint(result.data.toString());
     return result.data!;
   }
 }

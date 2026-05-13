@@ -60,14 +60,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CardInfo(userProvider.data.name, "Nama:"),
+                          CardInfo(userProvider.data?.name ?? "Admin", "Nama:"),
                           SizedBox(height: 12),
                           Divider(),
                           SizedBox(height: 12),
-                          CardInfo(userProvider.data.email, "Email:"),
+                          CardInfo(
+                            userProvider.data?.email ?? "Admin",
+                            "Email:",
+                          ),
                           Divider(),
                           SizedBox(height: 12),
-                          CardInfo(userProvider.data.roleName, "Role:"),
+                          CardInfo(
+                            userProvider.data?.roleName ?? "Admin",
+                            "Role:",
+                          ),
                         ],
                       ),
                     ),
@@ -102,7 +108,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Card ProfileCard(UserProvider userProvider) {
     final request = DiceBearRequest(
       style: DiceBearStyle.initials,
-      coreOptions: DiceBearCoreOptions(seed: userProvider.data.name),
+      coreOptions: DiceBearCoreOptions(
+        seed: userProvider.data?.name ?? "Admin",
+      ),
     );
 
     Widget avatar = request.toImage(width: 80, height: 80);
@@ -118,8 +126,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(userProvider.data.name),
-                Text(userProvider.data.email),
+                Text(userProvider.data?.name ?? "Admin"),
+                Text(userProvider.data?.email ?? "Admin"),
               ],
             ),
             Spacer(),

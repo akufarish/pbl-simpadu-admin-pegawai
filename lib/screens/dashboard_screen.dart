@@ -72,7 +72,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Selamat Datang, ${user?.name}",
+                          "Selamat Datang, ${user?.name ?? "Admin"}",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
