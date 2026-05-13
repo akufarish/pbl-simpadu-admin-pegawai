@@ -1,8 +1,8 @@
+import 'package:admin_pegawai/components/card_info_component.dart';
+import 'package:admin_pegawai/components/profile_card.component.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
-import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:dice_bear/dice_bear.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -49,7 +49,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text("Profile"),
                   SizedBox(height: 25),
-                  ProfileCard(userProvider),
+                  ProfileCard(
+                    userProvider.data?.name ?? "admin",
+                    userProvider.data?.email ?? "admin",
+                  ),
                   SizedBox(height: 35),
                   Text("Informasi Akun", style: TextStyle(fontSize: 20)),
                   SizedBox(height: 15),
@@ -103,60 +106,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-    );
-  }
-
-  Card ProfileCard(UserProvider userProvider) {
-    final request = DiceBearRequest(
-      style: DiceBearStyle.initials,
-      coreOptions: DiceBearCoreOptions(
-        seed: userProvider.data?.name ?? "Admin",
-      ),
-    );
-
-    Widget avatar = request.toImage(width: 80, height: 80);
-
-    return Card(
-      color: Colors.white,
-      elevation: 3,
-      child: Padding(
-        padding: EdgeInsetsGeometry.fromLTRB(13, 17, 13, 17),
-        child: Row(
-          children: [
-            // Icon(Icons.account_circle, size: 80),
-            ClipOval(child: avatar),
-            SizedBox(width: 22),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(userProvider.data?.name ?? "Admin"),
-                Text(userProvider.data?.email ?? "Admin"),
-              ],
-            ),
-            Spacer(),
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(child: Icon(Icons.edit, color: Colors.white)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Row CardInfo(String data, String label) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(label, style: TextStyle(fontSize: 20)),
-        Spacer(),
-        Text(data, style: TextStyle(fontSize: 20)),
-      ],
     );
   }
 }

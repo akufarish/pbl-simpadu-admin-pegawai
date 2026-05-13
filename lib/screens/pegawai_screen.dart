@@ -1,5 +1,6 @@
 import 'package:admin_pegawai/models/pegawai.dart';
 import 'package:admin_pegawai/providers/pegawai_provider.dart';
+import 'package:admin_pegawai/screens/detail_pegawai_screen.dart';
 import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -143,7 +144,14 @@ class PegawaiCard extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => DetailPegawaiScreen(dataPegawai: item),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primaryColor,
                   shape: RoundedRectangleBorder(
