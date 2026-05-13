@@ -15,6 +15,7 @@ class _VerifikasiScreenState extends State<VerifikasiScreen> {
     {"nama": "Dosen 3", "nik": "C01239102310295", "status": "Pending"},
     {"nama": "Dosen 4", "nik": "D01239102310296", "status": "Rejected"},
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
