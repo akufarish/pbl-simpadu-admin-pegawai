@@ -35,7 +35,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: const SizedBox(height: 300, child: SearchForm()),
+          child: const SizedBox(child: SearchForm()),
         );
       },
     );
@@ -116,6 +116,7 @@ class PegawaiCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 3,
       color: Colors.white,
       child: Padding(
         padding: EdgeInsetsGeometry.only(
@@ -171,7 +172,6 @@ class SearchForm extends StatefulWidget {
 
 class _SearchFormState extends State<SearchForm> {
   final _namaController = TextEditingController();
-  final _nipController = TextEditingController();
 
   void doSearch() async {}
 
@@ -193,20 +193,6 @@ class _SearchFormState extends State<SearchForm> {
               controller: _namaController,
               decoration: InputDecoration(
                 labelText: 'Nama Lengkap',
-                labelStyle: TextStyle(color: Colors.black),
-                prefixIcon: Icon(Icons.person, color: Colors.black),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            SizedBox(height: 19),
-            TextField(
-              controller: _nipController,
-              decoration: InputDecoration(
-                labelText: 'NIP',
                 labelStyle: TextStyle(color: Colors.black),
                 prefixIcon: Icon(Icons.person, color: Colors.black),
                 border: OutlineInputBorder(

@@ -1,4 +1,3 @@
-import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -88,6 +87,8 @@ Card presensiCard({
   required String tanggalMasuk,
 }) {
   return Card(
+    color: Colors.white,
+    elevation: 3.0,
     child: Padding(
       padding: EdgeInsetsGeometry.fromLTRB(23, 14, 23, 14),
 

@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text("Informasi Akun", style: TextStyle(fontSize: 20)),
                   SizedBox(height: 15),
                   Card(
+                    elevation: 3,
                     color: Colors.white,
                     child: Padding(
                       padding: EdgeInsetsGeometry.fromLTRB(13, 30, 13, 30),
@@ -116,6 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget avatar = request.toImage(width: 80, height: 80);
 
     return Card(
+      color: Colors.white,
+      elevation: 3,
       child: Padding(
         padding: EdgeInsetsGeometry.fromLTRB(13, 17, 13, 17),
         child: Row(

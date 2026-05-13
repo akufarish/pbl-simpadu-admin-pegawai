@@ -11,12 +11,9 @@ class VerifikasiCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 354,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return Card(
+      color: Colors.white,
+      elevation: 3.0,
       child: Padding(
         padding: EdgeInsetsGeometry.only(
           top: 14,
