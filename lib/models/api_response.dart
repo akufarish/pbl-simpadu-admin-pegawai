@@ -2,11 +2,13 @@ class ApiResponse<T> {
   final bool success;
   final String message;
   final T? data;
+  final String? error;
 
   ApiResponse({
     required this.success,
     required this.message,
-    required this.data,
+    this.data,
+    this.error,
   });
 
   factory ApiResponse.fromJson(
@@ -17,6 +19,7 @@ class ApiResponse<T> {
       success: json["success"],
       message: json["message"],
       data: json["data"] != null ? fromJsonT(json["data"]) : null,
+      error: json["error"],
     );
   }
 
@@ -30,6 +33,7 @@ class ApiResponse<T> {
       return ApiResponse<List<T>>(
         success: json["success"],
         message: json["message"],
+        error: json["error"],
         data: null,
       );
     }
@@ -37,6 +41,7 @@ class ApiResponse<T> {
     return ApiResponse<List<T>>(
       success: json["success"],
       message: json["message"],
+      error: json["error"],
       data: jsonList.map((item) => fromJsonT(item)).toList(),
     );
   }

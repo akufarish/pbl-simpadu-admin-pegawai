@@ -11,7 +11,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AuthService {
   final String kelompok1Url = dotenv.get("KELOMPOK_1_BASE_URL");
 
-  Future<bool> login(LoginRequest payload) async {
+  Future<String?> login(LoginRequest payload) async {
     try {
       final response = await http.post(
         Uri.parse("$kelompok1Url/api/auth/login"),
@@ -32,13 +32,17 @@ class AuthService {
           result.data!.refreshToken,
         );
 
-        return true;
+        return null;
       } else {
-        return false;
+        final result = ApiResponse<dynamic>.fromJson(
+          jsonResponse,
+          (item) => item,
+        );
+        return result.error;
       }
     } catch (e) {
       debugPrint(e.toString());
-      return false;
+      return "Koneksi gagal $e";
     }
   }
 

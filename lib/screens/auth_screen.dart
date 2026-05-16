@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: const SizedBox(height: 300, child: LoginForm()),
+          child: LoginForm(),
         );
       },
     );
@@ -89,6 +89,7 @@ class _LoginFormState extends State<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -100,6 +101,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void doLogin() async {
     if (_formKey.currentState!.validate()) {
+      setState(() => _errorMessage = null);
       final provider = context.read<UserProvider>();
 
       LoginRequest loginRequest = LoginRequest(
@@ -107,16 +109,17 @@ class _LoginFormState extends State<LoginForm> {
         password: _passwordController.text,
       );
 
-      bool isSuccess = await provider.login(loginRequest);
+      final isSuccess = await provider.login(loginRequest);
 
       if (!mounted) return;
 
-      if (isSuccess) {
+      if (isSuccess == null) {
         Navigator.pushReplacementNamed(context, "/dashboard");
       } else {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Email atau password salah")));
+        setState(() {
+          _errorMessage = isSuccess;
+        });
+        debugPrint("gagal");
       }
     }
   }
@@ -136,6 +139,36 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               Text("Login", style: TextStyle(fontSize: 20)),
               SizedBox(height: 19),
+              if (_errorMessage != null)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red.shade200),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(

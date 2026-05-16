@@ -8,11 +8,11 @@ class UserProvider with ChangeNotifier {
   UserResponse? _data;
   UserResponse? get data => _data;
 
-  Future<bool> login(LoginRequest payload) async {
+  Future<String?> login(LoginRequest payload) async {
     isLoading = true;
     notifyListeners();
     try {
-      bool isSuccess = await authService.login(payload);
+      String? isSuccess = await authService.login(payload);
       isLoading = false;
       notifyListeners();
       return isSuccess;
@@ -20,7 +20,7 @@ class UserProvider with ChangeNotifier {
       debugPrint("$e");
       isLoading = false;
       notifyListeners();
-      return false;
+      return "Terjadi kesalahan pada sistem";
     }
   }
 
