@@ -1,5 +1,6 @@
 import 'package:admin_pegawai/providers/pegawai_provider.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
+import 'package:admin_pegawai/providers/verifikasi_provider.dart';
 import 'package:admin_pegawai/screens/auth_screen.dart';
 import 'package:admin_pegawai/screens/main_screen.dart';
 import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
@@ -25,6 +26,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => PegawaiProvider()),
+        ChangeNotifierProvider(create: (_) => VerifikasiProvider()),
       ],
       child: MainApp(screen: screen),
     ),

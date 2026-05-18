@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class VerifikasiCard extends StatelessWidget {
-  final String nama, nik, status;
+  final String nama, value, status, label;
   const VerifikasiCard({
     super.key,
     required this.nama,
-    required this.nik,
+    required this.value,
     required this.status,
+    required this.label,
   });
 
   @override
@@ -15,7 +16,7 @@ class VerifikasiCard extends StatelessWidget {
       color: Colors.white,
       elevation: 3.0,
       child: Padding(
-        padding: EdgeInsetsGeometry.only(
+        padding: const EdgeInsets.only(
           top: 14,
           left: 23,
           right: 23,
@@ -25,30 +26,54 @@ class VerifikasiCard extends StatelessWidget {
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 10,
               children: [
-                Icon(Icons.account_circle, size: 42),
-                Text(nama),
-                Spacer(),
+                const Icon(Icons.account_circle, size: 42),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    nama,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+
+                const SizedBox(width: 10),
+
                 Container(
-                  width: 100,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   height: 30,
+                  constraints: const BoxConstraints(minWidth: 80),
                   decoration: BoxDecoration(
-                    color: status == "Pending" ? Colors.orange : Colors.green,
+                    color: status.toLowerCase() == "pending"
+                        ? Colors.orange
+                        : status.toLowerCase() == "approved"
+                        ? Colors.green
+                        : Colors.red,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Center(
-                    child: Text(status, style: TextStyle(color: Colors.white)),
+                    child: Text(
+                      status,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 10),
-            Divider(),
-            SizedBox(height: 14),
+            const SizedBox(height: 10),
+            const Divider(),
+            const SizedBox(height: 14),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [Text("NIK"), Spacer(), Text(nik)],
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                const Spacer(),
+                Expanded(child: Text(value, textAlign: TextAlign.right)),
+              ],
             ),
           ],
         ),

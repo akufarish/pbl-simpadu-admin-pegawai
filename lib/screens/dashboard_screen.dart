@@ -1,6 +1,7 @@
 import 'package:admin_pegawai/components/verifikasi_card_component.dart';
 import 'package:admin_pegawai/models/user.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
+import 'package:admin_pegawai/providers/verifikasi_provider.dart';
 import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     Future.microtask(() {
       context.read<UserProvider>().profile();
+      context.read<VerifikasiProvider>().getDataVerifikasi();
     });
   }
 
@@ -58,6 +60,8 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final UserProvider userProvider = context.watch<UserProvider>();
+    final VerifikasiProvider verifikasiProvider = context
+        .watch<VerifikasiProvider>();
     final UserResponse? user = userProvider.data;
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -129,16 +133,17 @@ class _DashboardPageState extends State<DashboardPage> {
                   padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      final dosen = daftarDosen[index];
+                      final dosen = verifikasiProvider.data[index];
                       return Padding(
                         padding: EdgeInsets.only(bottom: 16),
                         child: VerifikasiCard(
-                          nama: dosen["nama"]!,
-                          nik: dosen["nik"]!,
-                          status: dosen["status"]!,
+                          nama: dosen.employee.employeeName,
+                          label: dosen.fieldName,
+                          status: dosen.status,
+                          value: dosen.newValue!,
                         ),
                       );
-                    }, childCount: daftarDosen.length),
+                    }, childCount: verifikasiProvider.data.length),
                   ),
                 ),
               ],

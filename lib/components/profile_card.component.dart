@@ -20,9 +20,12 @@ Card ProfileCard(String nama, String email) {
           // Icon(Icons.account_circle, size: 80),
           ClipOval(child: avatar),
           SizedBox(width: 22),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(nama), Text(email)],
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [Text(nama), Text(email)],
+            ),
           ),
           Spacer(),
           Container(

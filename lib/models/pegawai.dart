@@ -44,18 +44,24 @@ class PegawaiResponse {
       address: json["address"],
       birthDate: json["birth_date"],
       birthPlace: json["birth_place"],
-      city: Domisili.fromJson(json["city"]),
       cityCode: json["city_code"],
-      district: Domisili.fromJson(json["district"]),
       gender: json["gender"],
       nik: json["nik"],
-      province: Domisili.fromJson(json["province"]),
-      village: Domisili.fromJson(json["village"]),
       districtCode: json["district_code"],
       employeeName: json["employee_name"],
       phoneNumber: json["phone_number"],
       provinceCode: json["province_code"],
       villageCode: json["village_code"],
+      city: json["city"] != null ? Domisili.fromJson(json["city"]) : null,
+      district: json["district"] != null
+          ? Domisili.fromJson(json["district"])
+          : null,
+      province: json["province"] != null
+          ? Domisili.fromJson(json["province"])
+          : null,
+      village: json["village"] != null
+          ? Domisili.fromJson(json["village"])
+          : null,
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:admin_pegawai/components/verifikasi_card_component.dart';
+import 'package:admin_pegawai/providers/verifikasi_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class VerifikasiScreen extends StatefulWidget {
   const VerifikasiScreen({super.key});
@@ -17,7 +19,18 @@ class _VerifikasiScreenState extends State<VerifikasiScreen> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.microtask(() {
+      context.read<VerifikasiProvider>().getDataVerifikasi();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final VerifikasiProvider verifikasiProvider = context
+        .watch<VerifikasiProvider>();
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -28,19 +41,20 @@ class _VerifikasiScreenState extends State<VerifikasiScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsetsGeometry.only(top: 20, left: 23, right: 23),
+            padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
-                final dosen = daftarDosen[index];
+                final dosen = verifikasiProvider.data[index];
                 return Padding(
                   padding: EdgeInsets.only(bottom: 16),
                   child: VerifikasiCard(
-                    nama: dosen["nama"]!,
-                    nik: dosen["nik"]!,
-                    status: dosen["status"]!,
+                    nama: dosen.employee.employeeName,
+                    label: dosen.fieldName,
+                    status: dosen.status,
+                    value: dosen.newValue!,
                   ),
                 );
-              }, childCount: daftarDosen.length),
+              }, childCount: verifikasiProvider.data.length),
             ),
           ),
         ],

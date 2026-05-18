@@ -37,10 +37,10 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      _nipController.text = "198503152010211212";
-      _nikController.text = "6371011503852212";
-      _employeeNameController.text = "akuasqolani";
-      _passwordController.text = "adminadminadmin";
+      _nipController.text = "198503152010211219";
+      _nikController.text = "6371011503852219";
+      _employeeNameController.text = "akuparisparis";
+      _passwordController.text = "parisparis";
     });
   }
 
