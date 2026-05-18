@@ -51,7 +51,7 @@ class AuthService {
       String? token = await TokenManager.getAccessToken();
 
       final response = await http.post(
-        Uri.parse("$kelompok1Url/api/user"),
+        Uri.parse("$kelompok1Url/api/users"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -62,7 +62,7 @@ class AuthService {
       debugPrint("Hit api: $jsonResponse");
       log("login", jsonResponse);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         debugPrint("Data berhasil ditambahkan");
         return true;
       } else {

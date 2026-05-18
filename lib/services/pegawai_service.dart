@@ -32,7 +32,7 @@ class PegawaiService {
           jsonResponse,
           (item) => PegawaiResponse.fromJson(item),
         );
-        debugPrint(result.data.toString());
+        // debugPrint(result.data.toString());
         return result.data;
       } else {
         debugPrint("samting wong");

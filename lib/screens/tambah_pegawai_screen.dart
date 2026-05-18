@@ -37,8 +37,8 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      _nipController.text = "198503152010211219";
-      _nikController.text = "6371011503852219";
+      _nipController.text = "198503152010211215";
+      _nikController.text = "6371011503852215";
       _employeeNameController.text = "akuparisparis";
       _passwordController.text = "parisparis";
     });
@@ -74,10 +74,14 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
         showDialog(
           context: context,
           builder: (BuildContext context) => AlertDialog(
+            icon: Icon(Icons.check_circle, color: Colors.green, size: 50),
             title: Text("Data berhasil ditambahkan!"),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
                 child: Text("Ok"),
               ),
             ],
@@ -97,7 +101,7 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
 
   @override
   Widget build(BuildContext context) {
-    // final provider = context.watch<PegawaiProvider>();
+    final provider = context.watch<PegawaiProvider>();
 
     return Scaffold(
       body: Padding(
@@ -132,7 +136,7 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: provider.isLoading ? null : doCreatePegawai,
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
