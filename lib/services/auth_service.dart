@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:admin_pegawai/models/api_response.dart';
 import 'package:admin_pegawai/models/user.dart';
-import 'package:admin_pegawai/utils/log.dart';
+import 'package:admin_pegawai/utils/api_client.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthService {
@@ -13,33 +11,36 @@ class AuthService {
 
   Future<String?> login(LoginRequest payload) async {
     try {
-      final response = await http.post(
-        Uri.parse("$kelompok1Url/api/auth/login"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(payload.toJson()),
+      final response = await ApiClient().dio.post(
+        "$kelompok1Url/api/auth/login",
+        data: payload.toJson(),
       );
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("Hit api: $jsonResponse");
 
-      if (response.statusCode == 200) {
-        final result = ApiResponse<LoginResponse>.fromJson(
-          jsonResponse,
-          (item) => LoginResponse.fromJson(item),
-        );
+      final result = ApiResponse<LoginResponse>.fromJson(
+        response.data,
+        (item) => LoginResponse.fromJson(item as Map<String, dynamic>),
+      );
 
-        await TokenManager.setToken(
-          result.data!.accessToken,
-          result.data!.refreshToken,
-        );
+      await TokenManager.setToken(
+        result.data!.accessToken,
+        result.data!.refreshToken,
+      );
 
-        return null;
-      } else {
-        final result = ApiResponse<dynamic>.fromJson(
-          jsonResponse,
-          (item) => item,
-        );
-        return result.error;
+      return null;
+    } on DioException catch (e) {
+      if (e.response != null) {
+        try {
+          final errorResult = ApiResponse<dynamic>.fromJson(
+            e.response!.data,
+            (item) => item,
+          );
+
+          return errorResult.error ?? errorResult.message;
+        } catch (_) {
+          return "Terjadi kesalahan pada server (${e.response?.statusCode})";
+        }
       }
+      return "Koneksi gagal: ${e.message}";
     } catch (e) {
       debugPrint(e.toString());
       return "Koneksi gagal $e";
@@ -48,20 +49,11 @@ class AuthService {
 
   Future<bool> register(RegisterRequest payload) async {
     try {
-      String? token = await TokenManager.getAccessToken();
-
-      final response = await http.post(
-        Uri.parse("$kelompok1Url/api/users"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(payload.toJson()),
+      final response = await ApiClient().dio.post(
+        "$kelompok1Url/api/users",
+        data: payload.toJson(),
       );
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("Hit api: $jsonResponse");
-      log("login", jsonResponse);
-
+      debugPrint("Hit api: ${response.data}");
       if (response.statusCode == 201) {
         debugPrint("Data berhasil ditambahkan");
         return true;
@@ -76,16 +68,11 @@ class AuthService {
 
   Future<bool> logout() async {
     try {
-      String? token = await TokenManager.getAccessToken();
-      final response = await http.post(
-        Uri.parse("$kelompok1Url/api/auth/logout"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
+      final response = await ApiClient().dio.post(
+        "$kelompok1Url/api/auth/logout",
       );
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("Hit api: $jsonResponse");
+
+      debugPrint("Hit api: ${response.data}");
 
       if (response.statusCode == 200) {
         await TokenManager.clearToken();
@@ -100,20 +87,12 @@ class AuthService {
   }
 
   Future<UserResponse> profile() async {
-    String? token = await TokenManager.getAccessToken();
-    final response = await http.get(
-      Uri.parse("$kelompok1Url/api/me"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
-    final jsonResponse = jsonDecode(response.body);
-    debugPrint("Hit api: $jsonResponse");
+    final response = await ApiClient().dio.post("$kelompok1Url/api/me");
+    debugPrint("Hit api: ${response.data}");
 
     final result = ApiResponse<UserResponse>.fromJson(
-      jsonResponse,
-      (item) => UserResponse.fromJson(item),
+      response.data,
+      (item) => UserResponse.fromJson(item as Map<String, dynamic>),
     );
     return result.data!;
   }

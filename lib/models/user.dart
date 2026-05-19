@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'user.g.dart';
+
+@JsonSerializable()
 class LoginRequest {
   final String email;
   final String password;
@@ -11,6 +15,7 @@ class LoginRequest {
   Map<String, dynamic> toJson() => {'email': email, 'password': password};
 }
 
+@JsonSerializable()
 class RegisterRequest {
   final String name;
   final String email;
@@ -45,6 +50,7 @@ class RegisterRequest {
   };
 }
 
+@JsonSerializable()
 class LoginResponse {
   final String accessToken;
   final String refreshToken;
@@ -65,6 +71,7 @@ class LoginResponse {
   }
 }
 
+@JsonSerializable()
 class UserResponse {
   final String id;
   final String name;

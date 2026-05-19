@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:admin_pegawai/models/api_response.dart';
 import 'package:admin_pegawai/models/pegawai.dart';
-import 'package:admin_pegawai/utils/token_manager.dart';
+import 'package:admin_pegawai/utils/api_client.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PegawaiService {
@@ -12,25 +9,17 @@ class PegawaiService {
 
   Future<PegawaiResponse?> createPegawai(PegawaiRequest payload) async {
     try {
-      String? token = await TokenManager.getAccessToken();
-      debugPrint("Payload: ${payload.toJson().toString()}");
-
-      final response = await http.post(
-        Uri.parse("$kelompok2Url/api/employees"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: jsonEncode(payload.toJson()),
+      final response = await ApiClient().dio.post(
+        "$kelompok2Url/api/employees",
+        data: payload.toJson(),
       );
 
-      final jsonResponse = jsonDecode(response.body);
-      debugPrint("Hit api: $jsonResponse");
+      debugPrint("Hit api: ${response.data}");
 
       if (response.statusCode == 201) {
         final result = ApiResponse<PegawaiResponse>.fromJson(
-          jsonResponse,
-          (item) => PegawaiResponse.fromJson(item),
+          response.data,
+          (item) => PegawaiResponse.fromJson(item as Map<String, dynamic>),
         );
         // debugPrint(result.data.toString());
         return result.data;
@@ -45,22 +34,26 @@ class PegawaiService {
   }
 
   Future<List<PegawaiResponse>> getDataPegawai() async {
-    String? token = await TokenManager.getAccessToken();
-    final response = await http.get(
-      Uri.parse("$kelompok2Url/api/employees"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    final jsonResponse = jsonDecode(response.body);
-    debugPrint("Data pegawai: $jsonResponse");
-    final result = ApiResponse.fromJsonList<PegawaiResponse>(
-      jsonResponse,
-      (e) => PegawaiResponse.fromJson(e),
-    );
-    debugPrint("Data pegawai: $result");
-    return result.data!;
+    final response = await ApiClient().dio.get("$kelompok2Url/api/employees");
+    debugPrint("halo dunia");
+    debugPrint("Data hasil pegawai: ${response.data}");
+    try {
+      if (response.statusCode == 200) {
+        final result = ApiResponse<List<PegawaiResponse>>.fromJson(
+          response.data,
+          (json) => (json as List)
+              .map(
+                (item) =>
+                    PegawaiResponse.fromJson(item as Map<String, dynamic>),
+              )
+              .toList(),
+        );
+        return result.data!;
+      } else {
+        throw Exception('samting wong');
+      }
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
   }
 }

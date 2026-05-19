@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'api_response.g.dart';
+
+@JsonSerializable(genericArgumentFactories: true)
 class ApiResponse<T> {
   final bool success;
   final String message;
@@ -13,36 +17,9 @@ class ApiResponse<T> {
 
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
-    T? Function(Map<String, dynamic>) fromJsonT,
-  ) {
-    return ApiResponse(
-      success: json["success"],
-      message: json["message"],
-      data: json["data"] != null ? fromJsonT(json["data"]) : null,
-      error: json["error"],
-    );
-  }
+    T Function(Object? json) fromJsonT,
+  ) => _$ApiResponseFromJson(json, fromJsonT);
 
-  static ApiResponse<List<T>> fromJsonList<T>(
-    Map<String, dynamic> json,
-    T Function(Map<String, dynamic>) fromJsonT,
-  ) {
-    final dynamic rawData = json["data"];
-
-    if (rawData == null) {
-      return ApiResponse<List<T>>(
-        success: json["success"],
-        message: json["message"],
-        error: json["error"],
-        data: null,
-      );
-    }
-    final List<dynamic> jsonList = json["data"];
-    return ApiResponse<List<T>>(
-      success: json["success"],
-      message: json["message"],
-      error: json["error"],
-      data: jsonList.map((item) => fromJsonT(item)).toList(),
-    );
-  }
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$ApiResponseToJson(this, toJsonT);
 }

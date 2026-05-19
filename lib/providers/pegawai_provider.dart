@@ -32,6 +32,7 @@ class PegawaiProvider with ChangeNotifier {
     notifyListeners();
     try {
       _dataPegawai = await pegawaiService.getDataPegawai();
+      debugPrint("hasil pegawai: $_dataPegawai");
       isLoading = false;
       notifyListeners();
     } catch (e) {

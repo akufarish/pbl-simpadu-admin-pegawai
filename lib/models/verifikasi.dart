@@ -1,6 +1,9 @@
 import 'package:admin_pegawai/models/pegawai.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'verifikasi.g.dart';
 
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class VerifikasiResponse {
   final String id;
   final String fieldName;

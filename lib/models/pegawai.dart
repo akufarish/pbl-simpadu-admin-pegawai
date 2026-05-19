@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'pegawai.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class PegawaiResponse {
   final String id;
   final String nip;
@@ -12,6 +16,7 @@ class PegawaiResponse {
   final String? districtCode;
   final String? cityCode;
   final String? provinceCode;
+
   final Domisili? village;
   final Domisili? district;
   final Domisili? city;
@@ -22,50 +27,27 @@ class PegawaiResponse {
     required this.nip,
     required this.nik,
     required this.employeeName,
-    required this.address,
-    required this.birthDate,
-    required this.birthPlace,
-    required this.gender,
-    required this.phoneNumber,
-    required this.village,
-    required this.villageCode,
-    required this.district,
-    required this.districtCode,
-    required this.city,
-    required this.cityCode,
-    required this.province,
-    required this.provinceCode,
+    this.address,
+    this.birthDate,
+    this.birthPlace,
+    this.gender,
+    this.phoneNumber,
+    this.village,
+    this.villageCode,
+    this.district,
+    this.districtCode,
+    this.city,
+    this.cityCode,
+    this.province,
+    this.provinceCode,
   });
 
-  factory PegawaiResponse.fromJson(Map<String, dynamic> json) {
-    return PegawaiResponse(
-      id: json["id"],
-      nip: json["nip"],
-      address: json["address"],
-      birthDate: json["birth_date"],
-      birthPlace: json["birth_place"],
-      cityCode: json["city_code"],
-      gender: json["gender"],
-      nik: json["nik"],
-      districtCode: json["district_code"],
-      employeeName: json["employee_name"],
-      phoneNumber: json["phone_number"],
-      provinceCode: json["province_code"],
-      villageCode: json["village_code"],
-      city: json["city"] != null ? Domisili.fromJson(json["city"]) : null,
-      district: json["district"] != null
-          ? Domisili.fromJson(json["district"])
-          : null,
-      province: json["province"] != null
-          ? Domisili.fromJson(json["province"])
-          : null,
-      village: json["village"] != null
-          ? Domisili.fromJson(json["village"])
-          : null,
-    );
-  }
+  factory PegawaiResponse.fromJson(Map<String, dynamic> json) =>
+      _$PegawaiResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$PegawaiResponseToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake)
 class PegawaiRequest {
   final String nip;
   final String nik;
@@ -79,23 +61,12 @@ class PegawaiRequest {
     required this.citizenCode,
   });
 
-  factory PegawaiRequest.fromJson(Map<String, dynamic> json) {
-    return PegawaiRequest(
-      nik: json["nik"],
-      nip: json["nip"],
-      citizenCode: json["citizen_code"],
-      employeeName: json["employee_name"],
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    "nik": nik,
-    "nip": nip,
-    "citizen_code": citizenCode,
-    "employee_name": employeeName,
-  };
+  factory PegawaiRequest.fromJson(Map<String, dynamic> json) =>
+      _$PegawaiRequestFromJson(json);
+  Map<String, dynamic> toJson() => _$PegawaiRequestToJson(this);
 }
 
+@JsonSerializable()
 class Domisili {
   final String id;
   final String code;
@@ -103,7 +74,7 @@ class Domisili {
 
   Domisili({required this.id, required this.code, required this.name});
 
-  factory Domisili.fromJson(Map<String, dynamic> json) {
-    return Domisili(id: json["id"], code: json["code"], name: json["name"]);
-  }
+  factory Domisili.fromJson(Map<String, dynamic> json) =>
+      _$DomisiliFromJson(json);
+  Map<String, dynamic> toJson() => _$DomisiliToJson(this);
 }
