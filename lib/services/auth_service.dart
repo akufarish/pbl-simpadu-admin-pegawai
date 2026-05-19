@@ -87,7 +87,7 @@ class AuthService {
   }
 
   Future<UserResponse> profile() async {
-    final response = await ApiClient().dio.post("$kelompok1Url/api/me");
+    final response = await ApiClient().dio.get("$kelompok1Url/api/me");
     debugPrint("Hit api: ${response.data}");
 
     final result = ApiResponse<UserResponse>.fromJson(
