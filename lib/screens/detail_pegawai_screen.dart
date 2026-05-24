@@ -32,7 +32,6 @@ class DetailPegawaiScreen extends StatelessWidget {
           SliverPadding(
             padding: const EdgeInsets.only(top: 18, left: 23, right: 23),
             sliver: SliverToBoxAdapter(
-              // Tambahkan ini sebagai pembungkus
               child: Card(
                 color: Colors.white,
                 elevation: 3,

@@ -31,6 +31,8 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   final _passwordController = TextEditingController();
   PegawaiService pegawaiService = PegawaiService();
   AuthService authService = AuthService();
+  final _formKey = GlobalKey<FormState>();
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -45,57 +47,59 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
   }
 
   void doCreatePegawai() async {
-    final provider = context.read<PegawaiProvider>();
-    final userProvider = context.read<UserProvider>();
+    if (_formKey.currentState!.validate()) {
+      final provider = context.read<PegawaiProvider>();
+      final userProvider = context.read<UserProvider>();
 
-    PegawaiRequest pegawaiRequest = PegawaiRequest(
-      nip: _nipController.text,
-      nik: _nikController.text,
-      employeeName: _employeeNameController.text,
-      citizenCode: "ID",
-    );
-
-    await provider.create(pegawaiRequest);
-
-    if (!mounted) return;
-
-    if (provider.data != null) {
-      RegisterRequest payload = RegisterRequest(
-        name: _employeeNameController.text,
-        email: "${_nipController.text}@dosen.poliban.ac.id",
-        password: _nipController.text,
-        roleName: "dosen",
-        detailId: provider.data!.id,
+      PegawaiRequest pegawaiRequest = PegawaiRequest(
+        nip: _nipController.text,
+        nik: _nikController.text,
+        employeeName: _employeeNameController.text,
+        citizenCode: "ID",
       );
-      bool isSuccess = await userProvider.register(payload);
+
+      await provider.create(pegawaiRequest);
+
       if (!mounted) return;
 
-      if (isSuccess) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            icon: Icon(Icons.check_circle, color: Colors.green, size: 50),
-            title: Text("Data berhasil ditambahkan!"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-                child: Text("Ok"),
-              ),
-            ],
-          ),
+      if (provider.data != null) {
+        RegisterRequest payload = RegisterRequest(
+          name: _employeeNameController.text,
+          email: "${_nipController.text}@dosen.com",
+          password: _nipController.text,
+          roleName: "dosen",
+          detailId: provider.data!.id,
         );
+        bool isSuccess = await userProvider.register(payload);
+        if (!mounted) return;
+
+        if (isSuccess) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              icon: Icon(Icons.check_circle, color: Colors.green, size: 50),
+              title: Text("Data berhasil ditambahkan!"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                  child: Text("Ok"),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Samting wong")));
+        }
       } else {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Samting wong")));
       }
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Samting wong")));
     }
   }
 
@@ -104,56 +108,63 @@ class _TambahPegawaiFormState extends State<TambahPegawaiForm> {
     final provider = context.watch<PegawaiProvider>();
 
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsetsGeometry.fromLTRB(23, 40, 23, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Tambah Pegawai"),
-            SizedBox(height: 16),
-            Card(
-              color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(29, 18, 29, 18),
-                child: Column(
-                  children: [
-                    InputGroup(
-                      textEditingController: _employeeNameController,
-                      icon: Icons.person,
-                      label: "Nama Lengkap",
-                    ),
-                    InputGroup(
-                      textEditingController: _nipController,
-                      icon: Icons.message,
-                      label: "NIP",
-                    ),
-                    InputGroup(
-                      textEditingController: _nikController,
-                      icon: Icons.message,
-                      label: "NIK",
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: provider.isLoading ? null : doCreatePegawai,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsetsGeometry.fromLTRB(23, 40, 23, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Tambah Pegawai"),
+              SizedBox(height: 16),
+              Card(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(29, 18, 29, 18),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        InputGroup(
+                          textEditingController: _employeeNameController,
+                          icon: Icons.person,
+                          label: "Nama Lengkap",
+                        ),
+                        InputGroup(
+                          textEditingController: _nipController,
+                          icon: Icons.message,
+                          label: "NIP",
+                        ),
+                        InputGroup(
+                          textEditingController: _nikController,
+                          icon: Icons.message,
+                          label: "NIK",
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: provider.isLoading
+                                ? null
+                                : doCreatePegawai,
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              backgroundColor: AppColors.primaryColor,
+                            ),
+                            child: const Text(
+                              "Tambah",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                          backgroundColor: AppColors.primaryColor,
                         ),
-                        child: const Text(
-                          "Tambah",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -181,7 +192,7 @@ class InputGroup extends StatelessWidget {
         children: [
           Text(label, style: TextStyle(color: Colors.grey, fontSize: 20)),
           SizedBox(height: 15),
-          TextField(
+          TextFormField(
             controller: textEditingController,
             decoration: InputDecoration(
               labelText: label,
@@ -193,6 +204,12 @@ class InputGroup extends StatelessWidget {
               filled: true,
               fillColor: Colors.white,
             ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Harap masukkan $label";
+              }
+              return null;
+            },
           ),
         ],
       ),

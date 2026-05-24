@@ -1,6 +1,7 @@
 import 'package:admin_pegawai/models/api_response.dart';
 import 'package:admin_pegawai/models/pegawai.dart';
 import 'package:admin_pegawai/utils/api_client.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -21,12 +22,30 @@ class PegawaiService {
           response.data,
           (item) => PegawaiResponse.fromJson(item as Map<String, dynamic>),
         );
-        // debugPrint(result.data.toString());
+        debugPrint(result.data.toString());
         return result.data;
       } else {
         debugPrint("samting wong");
         return null;
       }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        try {
+          final errorResult = ApiResponse<dynamic>.fromJson(
+            e.response!.data,
+            (item) => item,
+          );
+
+          debugPrint(errorResult.error ?? errorResult.message);
+          return null;
+        } catch (_) {
+          debugPrint(
+            "Terjadi kesalahan pada server (${e.response?.statusCode})",
+          );
+          return null;
+        }
+      }
+      return null;
     } catch (e) {
       debugPrint(e.toString());
       return null;

@@ -54,12 +54,31 @@ class AuthService {
         data: payload.toJson(),
       );
       debugPrint("Hit api: ${response.data}");
+      debugPrint("Register berhasil: ${response.data}");
       if (response.statusCode == 201) {
         debugPrint("Data berhasil ditambahkan");
         return true;
       } else {
         return false;
       }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        try {
+          final errorResult = ApiResponse<dynamic>.fromJson(
+            e.response!.data,
+            (item) => item,
+          );
+
+          debugPrint(errorResult.error ?? errorResult.message);
+          return false;
+        } catch (_) {
+          debugPrint(
+            "Terjadi kesalahan pada server (${e.response?.statusCode})",
+          );
+          return false;
+        }
+      }
+      return false;
     } catch (e) {
       debugPrint(e.toString());
       return false;
