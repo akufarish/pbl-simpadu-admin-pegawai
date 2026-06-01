@@ -6,6 +6,7 @@ class UserProvider with ChangeNotifier {
   final AuthService authService = AuthService();
   bool isLoading = false;
   UserResponse? _data;
+
   UserResponse? get data => _data;
 
   Future<String?> login(LoginRequest payload) async {
@@ -67,6 +68,22 @@ class UserProvider with ChangeNotifier {
       debugPrint("$e");
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<bool> updatePassword(LoginRequest payload) async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      bool isSuccess = await authService.updatePassword(payload);
+      isLoading = false;
+      notifyListeners();
+      return isSuccess;
+    } catch (e) {
+      debugPrint("$e");
+      isLoading = false;
+      notifyListeners();
+      return false;
     }
   }
 }

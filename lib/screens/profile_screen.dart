@@ -1,8 +1,10 @@
 import 'package:admin_pegawai/components/card_info_component.dart';
 import 'package:admin_pegawai/components/profile_card.component.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
+import 'package:admin_pegawai/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dice_bear/dice_bear.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -49,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text("Profile"),
                   SizedBox(height: 25),
-                  ProfileCard(
+                  _profileCard(
                     userProvider.data?.name ?? "admin",
                     userProvider.data?.email ?? "admin",
                   ),
@@ -106,6 +108,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
+    );
+  }
+
+  Card _profileCard(String nama, String email) {
+    final request = DiceBearRequest(
+      style: DiceBearStyle.initials,
+      coreOptions: DiceBearCoreOptions(seed: nama),
+    );
+
+    Widget avatar = request.toImage(width: 80, height: 80);
+
+    return Card(
+      color: Colors.white,
+      elevation: 3,
+      child: Padding(
+        padding: EdgeInsetsGeometry.fromLTRB(13, 17, 13, 17),
+        child: Row(
+          children: [
+            // Icon(Icons.account_circle, size: 80),
+            ClipOval(child: avatar),
+            SizedBox(width: 22),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text(nama), Text(email)],
+              ),
+            ),
+            Spacer(),
+            // Container(
+            //   width: 50,
+            //   height: 50,
+            //   decoration: BoxDecoration(
+            //     color: AppColors.primaryColor,
+            //     borderRadius: BorderRadius.circular(10),
+            //   ),
+            //   child: Center(child: Icon(Icons.edit, color: Colors.white)),
+            // ),
+            IconButton.filled(
+              style: IconButton.styleFrom(
+                minimumSize: Size(50, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(10),
+                ),
+                backgroundColor: AppColors.primaryColor,
+              ),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  "/ubah-password",
+                  arguments: email,
+                );
+              },
+              icon: Icon(Icons.edit, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

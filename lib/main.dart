@@ -4,6 +4,7 @@ import 'package:admin_pegawai/providers/verifikasi_provider.dart';
 import 'package:admin_pegawai/screens/auth_screen.dart';
 import 'package:admin_pegawai/screens/main_screen.dart';
 import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
+import 'package:admin_pegawai/screens/ubah_password.dart';
 import 'package:admin_pegawai/utils/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -44,6 +45,7 @@ class MainApp extends StatelessWidget {
         "/login": (context) => AuthScreen(),
         "/dashboard": (context) => MainScreen(),
         "/tambah-pegawai": (context) => TambahPegawai(),
+        "/ubah-password": (context) => UbahPassword(),
       },
     );
   }
