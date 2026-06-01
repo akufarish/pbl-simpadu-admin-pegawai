@@ -13,6 +13,23 @@ class PegawaiScreen extends StatefulWidget {
 }
 
 class _PegawaiScreenState extends State<PegawaiScreen> {
+  List<PegawaiResponse> foundPegawai = [];
+  String _searchQuery = "";
+
+  void _onSearch(String query) {
+    setState(() {
+      _searchQuery = query;
+      foundPegawai = context
+          .read<PegawaiProvider>()
+          .dataPegawai
+          .where(
+            (p) => p.employeeName.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    });
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +53,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: const SizedBox(child: SearchForm()),
+          child: SizedBox(child: SearchForm(onSearch: _onSearch)),
         );
       },
     );
@@ -45,54 +62,101 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
   @override
   Widget build(BuildContext context) {
     final PegawaiProvider pegawaiProvider = context.watch<PegawaiProvider>();
+    final displayList = _searchQuery.isEmpty
+        ? pegawaiProvider.dataPegawai
+        : foundPegawai;
+
     return Scaffold(
       body: pegawaiProvider.isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : CustomScrollView(
               slivers: [
                 SliverPadding(
-                  padding: EdgeInsets.only(top: 48, left: 23, right: 23),
+                  padding: const EdgeInsets.only(top: 48, left: 23, right: 23),
                   sliver: SliverToBoxAdapter(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Pegawai"),
-                        SizedBox(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, "/tambah-pegawai");
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadiusGeometry.circular(10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Pegawai",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
                               ),
-                              backgroundColor: AppColors.primaryColor,
                             ),
-                            child: Text(
-                              "Tambah",
-                              style: TextStyle(color: Colors.white),
+                            SizedBox(
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/tambah-pegawai",
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  backgroundColor: AppColors.primaryColor,
+                                ),
+                                child: const Text(
+                                  "Tambah",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                        if (_searchQuery.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  "Hasil pencarian untuk: \"$_searchQuery\"",
+                                  style: const TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _searchQuery = "";
+                                    foundPegawai = [];
+                                  });
+                                },
+                                child: const Text("Hapus"),
+                              ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                   ),
                 ),
-                SliverPadding(
-                  padding: EdgeInsetsGeometry.only(
-                    top: 20,
-                    left: 23,
-                    right: 23,
+                if (displayList.isEmpty && _searchQuery.isNotEmpty)
+                  const SliverToBoxAdapter(
+                    child: Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text("Pegawai tidak ditemukan"),
+                      ),
+                    ),
                   ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(top: 20, left: 23, right: 23),
                   sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      final dosen = pegawaiProvider.dataPegawai[index];
+                      final dosen = displayList[index];
                       return Padding(
-                        padding: EdgeInsetsGeometry.only(bottom: 16),
+                        padding: const EdgeInsets.only(bottom: 16),
                         child: PegawaiCard(item: dosen),
                       );
-                    }, childCount: pegawaiProvider.dataPegawai.length),
+                    }, childCount: displayList.length),
                   ),
                 ),
               ],
@@ -172,7 +236,8 @@ class PegawaiCard extends StatelessWidget {
 }
 
 class SearchForm extends StatefulWidget {
-  const SearchForm({super.key});
+  final Function(String) onSearch;
+  const SearchForm({super.key, required this.onSearch});
 
   @override
   State<SearchForm> createState() => _SearchFormState();
@@ -181,7 +246,15 @@ class SearchForm extends StatefulWidget {
 class _SearchFormState extends State<SearchForm> {
   final _namaController = TextEditingController();
 
-  void doSearch() async {}
+  void doSearch() {
+    widget.onSearch(_namaController.text);
+  }
+
+  @override
+  void dispose() {
+    _namaController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
