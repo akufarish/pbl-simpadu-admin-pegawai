@@ -1,15 +1,20 @@
 import 'package:admin_pegawai/models/pegawai.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'verifikasi.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class VerifikasiResponse {
   final String id;
+  @JsonKey(name: "field_name")
   final String fieldName;
+  @JsonKey(name: "old_value")
   final String? oldValue;
+  @JsonKey(name: "new_value")
   final String? newValue;
   final String status;
+  @JsonKey(name: "employee_id")
   final String employeeId;
   final PegawaiResponse employee;
 
@@ -23,17 +28,8 @@ class VerifikasiResponse {
     required this.employee,
   });
 
-  factory VerifikasiResponse.fromJson(Map<String, dynamic> json) {
-    debugPrint("Data verifikasi list");
+  factory VerifikasiResponse.fromJson(Map<String, dynamic> json) =>
+      _$VerifikasiResponseFromJson(json);
 
-    return VerifikasiResponse(
-      id: json["id"],
-      employeeId: json["employee_id"],
-      fieldName: json["field_name"],
-      oldValue: json["old_value"]?.toString(),
-      newValue: json["new_value"]?.toString(),
-      status: json["status"],
-      employee: PegawaiResponse.fromJson(json["employee"] ?? {}),
-    );
-  }
+  Map<String, dynamic> toJson() => _$VerifikasiResponseToJson(this);
 }
