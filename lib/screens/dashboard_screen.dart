@@ -1,5 +1,6 @@
 import 'package:admin_pegawai/components/verifikasi_card_component.dart';
 import 'package:admin_pegawai/models/user.dart';
+import 'package:admin_pegawai/providers/pegawai_provider.dart';
 import 'package:admin_pegawai/providers/user_provider.dart';
 import 'package:admin_pegawai/providers/verifikasi_provider.dart';
 import 'package:admin_pegawai/utils/app_colors.dart';
@@ -32,6 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
     Future.microtask(() {
       context.read<UserProvider>().profile();
       context.read<VerifikasiProvider>().getDataVerifikasi();
+      context.read<PegawaiProvider>().getTotalPegawai();
     });
   }
 
@@ -63,9 +65,10 @@ class _DashboardPageState extends State<DashboardPage> {
     final VerifikasiProvider verifikasiProvider = context
         .watch<VerifikasiProvider>();
     final UserResponse? user = userProvider.data;
+    final PegawaiProvider pegawaiProvider = context.watch<PegawaiProvider>();
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: userProvider.isLoading
+      body: userProvider.isLoading && pegawaiProvider.isLoading
           ? Center(child: CircularProgressIndicator())
           : CustomScrollView(
               slivers: [
@@ -99,7 +102,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       CardCount(
                         icon: Icons.person,
                         label: "Total Pegawai",
-                        total: 120,
+                        total: pegawaiProvider.pegawaiCount.totalEmployee,
                       ),
                       CardCount(
                         icon: Icons.check_circle_outline,

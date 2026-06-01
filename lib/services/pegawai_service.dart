@@ -75,4 +75,27 @@ class PegawaiService {
       throw Exception('Network error: $e');
     }
   }
+
+  Future<PegawaiCount> getTotalPegawai() async {
+    final response = await ApiClient().dio.get(
+      "$kelompok2Url/api/employees/info/count",
+    );
+
+    try {
+      if (response.statusCode == 200) {
+        final result = ApiResponse<PegawaiCount>.fromJson(
+          response.data,
+          (json) => PegawaiCount.fromJson(json as Map<String, dynamic>),
+        );
+        debugPrint("Get data pegawai: ${result.data}");
+        return result.data!;
+      } else {
+        throw Exception('samting wong');
+      }
+    } on DioException catch (e) {
+      throw Exception('Samting wong: $e');
+    } catch (e) {
+      throw Exception('Network error: $e');
+    }
+  }
 }

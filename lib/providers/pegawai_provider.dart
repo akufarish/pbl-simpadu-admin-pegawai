@@ -6,10 +6,16 @@ class PegawaiProvider with ChangeNotifier {
   bool isLoading = false;
   final PegawaiService pegawaiService = PegawaiService();
   PegawaiResponse? _data;
+
   PegawaiResponse? get data => _data;
 
   List<PegawaiResponse> _dataPegawai = [];
+
   List<PegawaiResponse> get dataPegawai => _dataPegawai;
+
+  PegawaiCount _pegawaiCount = PegawaiCount(totalEmployee: 0);
+
+  PegawaiCount get pegawaiCount => _pegawaiCount;
 
   Future<bool> create(PegawaiRequest payload) async {
     isLoading = true;
@@ -39,6 +45,22 @@ class PegawaiProvider with ChangeNotifier {
       debugPrint(e.toString());
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<PegawaiCount> getTotalPegawai() async {
+    isLoading = true;
+    notifyListeners();
+    try {
+      _pegawaiCount = await pegawaiService.getTotalPegawai();
+      isLoading = false;
+      notifyListeners();
+      return _pegawaiCount;
+    } catch (e) {
+      debugPrint(e.toString());
+      isLoading = false;
+      notifyListeners();
+      rethrow;
     }
   }
 }

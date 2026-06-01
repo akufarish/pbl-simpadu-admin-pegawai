@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+
 part 'pegawai.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
@@ -44,6 +45,7 @@ class PegawaiResponse {
 
   factory PegawaiResponse.fromJson(Map<String, dynamic> json) =>
       _$PegawaiResponseFromJson(json);
+
   Map<String, dynamic> toJson() => _$PegawaiResponseToJson(this);
 }
 
@@ -63,6 +65,7 @@ class PegawaiRequest {
 
   factory PegawaiRequest.fromJson(Map<String, dynamic> json) =>
       _$PegawaiRequestFromJson(json);
+
   Map<String, dynamic> toJson() => _$PegawaiRequestToJson(this);
 }
 
@@ -76,5 +79,19 @@ class Domisili {
 
   factory Domisili.fromJson(Map<String, dynamic> json) =>
       _$DomisiliFromJson(json);
+
   Map<String, dynamic> toJson() => _$DomisiliToJson(this);
+}
+
+@JsonSerializable()
+class PegawaiCount {
+  @JsonKey(name: "total_employee")
+  final int totalEmployee;
+
+  PegawaiCount({required this.totalEmployee});
+
+  factory PegawaiCount.fromJson(Map<String, dynamic> json) =>
+      _$PegawaiCountFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PegawaiCountToJson(this);
 }

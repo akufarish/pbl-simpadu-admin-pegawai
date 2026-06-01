@@ -83,3 +83,9 @@ Map<String, dynamic> _$DomisiliToJson(Domisili instance) => <String, dynamic>{
   'code': instance.code,
   'name': instance.name,
 };
+
+PegawaiCount _$PegawaiCountFromJson(Map<String, dynamic> json) =>
+    PegawaiCount(totalEmployee: (json['total_employee'] as num).toInt());
+
+Map<String, dynamic> _$PegawaiCountToJson(PegawaiCount instance) =>
+    <String, dynamic>{'total_employee': instance.totalEmployee};
