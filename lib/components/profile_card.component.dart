@@ -27,16 +27,6 @@ Card ProfileCard(String nama, String email) {
               children: [Text(nama), Text(email)],
             ),
           ),
-          Spacer(),
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(child: Icon(Icons.edit, color: Colors.white)),
-          ),
         ],
       ),
     ),
