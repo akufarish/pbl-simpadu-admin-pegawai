@@ -1,4 +1,4 @@
-import 'package:admin_pegawai_bloc/core/error_handler.dart';
+import 'package:admin_pegawai_bloc/core/errors/error_handler.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/data/remote/pegawai_remote.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/entities/pegawai_entity.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/repository/pegawai_repository.dart';

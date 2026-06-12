@@ -1,4 +1,4 @@
-import 'package:admin_pegawai_bloc/core/app_colors.dart';
+import 'package:admin_pegawai_bloc/core/constants/app_colors.dart';
 import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';

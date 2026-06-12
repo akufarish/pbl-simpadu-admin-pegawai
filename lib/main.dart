@@ -1,5 +1,5 @@
-import 'package:admin_pegawai_bloc/core/di.dart';
-import 'package:admin_pegawai_bloc/core/token_manager.dart';
+import 'package:admin_pegawai_bloc/core/di/di.dart';
+import 'package:admin_pegawai_bloc/core/utils/token_manager.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/screen/login_screen.dart';
 import 'package:admin_pegawai_bloc/features/dashboard/presentation/screen/main_screen.dart';

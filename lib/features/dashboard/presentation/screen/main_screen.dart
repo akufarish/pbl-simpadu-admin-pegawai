@@ -1,4 +1,4 @@
-import 'package:admin_pegawai_bloc/core/app_colors.dart';
+import 'package:admin_pegawai_bloc/core/constants/app_colors.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/screen/profile_screen.dart';
 import 'package:admin_pegawai_bloc/features/dashboard/presentation/screen/dashboard_screen.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/screen/pegawai_screen.dart';

@@ -1,4 +1,4 @@
-import 'package:admin_pegawai_bloc/core/api_response.dart';
+import 'package:admin_pegawai_bloc/core/network/api_response.dart';
 import 'package:admin_pegawai_bloc/features/auth/data/model/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
