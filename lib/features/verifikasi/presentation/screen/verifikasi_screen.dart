@@ -1,4 +1,8 @@
+import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class VerifikasiScreen extends StatefulWidget {
   const VerifikasiScreen({super.key});
@@ -9,7 +13,86 @@ class VerifikasiScreen extends StatefulWidget {
 
 class _VerifikasiScreenState extends State<VerifikasiScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<VerifikasiCubit>().getDataVerifikasi();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: EdgeInsets.only(top: 48, left: 23, right: 23),
+          sliver: SliverToBoxAdapter(child: Text("Verifikasi Perubahan Data")),
+        ),
+
+        BlocBuilder<VerifikasiCubit, VerifikasiState>(
+          builder: (context, state) {
+            if (state is VerifikasiLoading) {
+              return Skeletonizer.sliver(
+                enabled: true,
+                child: SliverPadding(
+                  padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 16),
+                        child: VerifikasiCard(
+                          nama: "joy",
+                          label: "joy",
+                          status: "joy",
+                          value: "joy",
+                        ),
+                      );
+                    }, childCount: 3),
+                  ),
+                ),
+              );
+            }
+
+            if (state is VerifikasiSuccess) {
+              if (state.dataVerifikasi.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Center(child: Text("Data Kosong")),
+                );
+              }
+
+              return SliverPadding(
+                padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final dosen = state.dataVerifikasi[index];
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 16),
+                      child: VerifikasiCard(
+                        nama: dosen.employee.employeeName,
+                        label: dosen.fieldName,
+                        status: dosen.status,
+                        value: dosen.newValue!,
+                      ),
+                    );
+                  }, childCount: state.dataVerifikasi.length),
+                ),
+              );
+            }
+
+            if (state is VerifikasiError) {
+              return SliverToBoxAdapter(
+                child: Center(child: Text(state.errorMessage)),
+              );
+            }
+
+            return SliverToBoxAdapter(
+              child: Center(child: Text("Samting wong")),
+            );
+          },
+        ),
+      ],
+    );
   }
 }
