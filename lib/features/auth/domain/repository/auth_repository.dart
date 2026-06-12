@@ -4,4 +4,6 @@ abstract class AuthRepository {
   Future<LoginResponseEntity> login(LoginRequestEntity payload);
 
   Future<UserResponseEntity> profile();
+
+  Future<bool> logout();
 }

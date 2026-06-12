@@ -14,4 +14,7 @@ abstract class AuthRemote {
 
   @GET("/api/me")
   Future<ApiResponse<UserResponse>> profile();
+
+  @POST("/api/auth/logout")
+  Future<ApiResponse> logout();
 }

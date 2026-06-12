@@ -13,4 +13,8 @@ class AuthUsecase {
   Future<UserResponseEntity> profile() async {
     return await authRepository.profile();
   }
+
+  Future<bool> logout() async {
+    return await authRepository.logout();
+  }
 }

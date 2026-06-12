@@ -31,4 +31,20 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ProfileError(e.toString().replaceAll("Exception:", "")));
     }
   }
+
+  Future<void> logout() async {
+    emit(AuthLoading());
+
+    try {
+      final result = await authUsecase.logout();
+
+      if (result) {
+        emit(AuthInitial());
+      } else {
+        emit(AuthError("samting wong"));
+      }
+    } catch (e) {
+      emit(AuthError(e.toString().replaceAll("Exception:", "")));
+    }
+  }
 }

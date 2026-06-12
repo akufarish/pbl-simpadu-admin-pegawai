@@ -1,3 +1,4 @@
+import 'package:admin_pegawai_bloc/core/components/card_info.dart';
 import 'package:admin_pegawai_bloc/core/constants/app_colors.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/entities/pegawai_entity.dart';
 import 'package:flutter/material.dart';
@@ -61,26 +62,26 @@ class DetailPegawaiScreen extends StatelessWidget {
                         child: TabBarView(
                           children: [
                             _buildTabContent([
-                              _cardInfo(dataPegawai.employeeName, "Nama:"),
+                              cardInfo(dataPegawai.employeeName, "Nama:"),
                               const SizedBox(height: 12),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(dataPegawai.nik, "NIK:"),
+                              cardInfo(dataPegawai.nik, "NIK:"),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(dataPegawai.nip, "NIP:"),
+                              cardInfo(dataPegawai.nip, "NIP:"),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(dataPegawai.gender!, "Gender:"),
+                              cardInfo(dataPegawai.gender!, "Gender:"),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(
+                              cardInfo(
                                 dataPegawai.phoneNumber.toString(),
                                 "Phone Number:",
                               ),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(
+                              cardInfo(
                                 DateFormat("EEEE, MMMM d, yyyy").format(
                                   DateTime.parse(dataPegawai.birthDate!),
                                 ),
@@ -90,19 +91,19 @@ class DetailPegawaiScreen extends StatelessWidget {
                             const Center(child: Text("Konten Akun")),
 
                             _buildTabContent([
-                              _cardInfo(
+                              cardInfo(
                                 dataPegawai.city?.name ?? "kota",
                                 "Kota:",
                               ),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(
+                              cardInfo(
                                 dataPegawai.province?.name ?? "provinsi",
                                 "Provinsi:",
                               ),
                               const Divider(),
                               const SizedBox(height: 12),
-                              _cardInfo(
+                              cardInfo(
                                 dataPegawai.province?.name ?? "provinsi",
                                 "Provinsi:",
                               ),
@@ -129,17 +130,6 @@ Widget _buildTabContent(List<Widget> children) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: children,
     ),
-  );
-}
-
-Widget _cardInfo(String data, String label) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(label, style: TextStyle(fontSize: 20, color: Colors.grey)),
-      SizedBox(height: 12),
-      Text(data, style: TextStyle(fontSize: 20)),
-    ],
   );
 }
 

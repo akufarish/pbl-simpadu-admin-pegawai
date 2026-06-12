@@ -51,4 +51,20 @@ class AuthRepositoryImpl implements AuthRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<bool> logout() async {
+    try {
+      final response = await authRemote.logout();
+
+      if (response.success == true) {
+        await TokenManager.clearToken();
+        return response.success;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }
