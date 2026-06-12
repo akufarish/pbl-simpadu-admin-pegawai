@@ -14,7 +14,7 @@ class PegawaiCubit extends Cubit<PegawaiState> {
     emit(PegawaiLoading());
     try {
       final result = await pegawaiUsecase.getDataPegawai();
-      emit(PegawaiSuccess(result));
+      emit(PegawaiSuccess(dataPegawai: result, foundPegawai: result));
     } catch (e) {
       emit(PegawaiError(e.toString().replaceAll("Exception:", "")));
     }
@@ -27,6 +27,22 @@ class PegawaiCubit extends Cubit<PegawaiState> {
       emit(PegawaiCountSuccess(result));
     } catch (e) {
       emit(PegawaiCountError(e.toString().replaceAll("Exception:", "")));
+    }
+  }
+
+  void searchPegawai(String query) {
+    if (state is PegawaiSuccess) {
+      final currentState = state as PegawaiSuccess;
+
+      if (query.isEmpty) {
+        emit(currentState.copyWith(foundPegawai: currentState.dataPegawai));
+      } else {
+        final filteredList = currentState.dataPegawai.where((p) {
+          return p.employeeName.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+
+        emit(currentState.copyWith(foundPegawai: filteredList));
+      }
     }
   }
 }

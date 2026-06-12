@@ -9,8 +9,19 @@ class PegawaiLoading extends PegawaiState {}
 
 class PegawaiSuccess extends PegawaiState {
   final List<PegawaiResponseEntity> dataPegawai;
+  final List<PegawaiResponseEntity> foundPegawai;
 
-  PegawaiSuccess(this.dataPegawai);
+  PegawaiSuccess({required this.dataPegawai, required this.foundPegawai});
+
+  PegawaiSuccess copyWith({
+    List<PegawaiResponseEntity>? dataPegawai,
+    List<PegawaiResponseEntity>? foundPegawai,
+  }) {
+    return PegawaiSuccess(
+      dataPegawai: dataPegawai ?? this.dataPegawai,
+      foundPegawai: foundPegawai ?? this.foundPegawai,
+    );
+  }
 }
 
 class PegawaiError extends PegawaiState {
