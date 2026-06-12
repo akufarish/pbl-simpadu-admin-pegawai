@@ -1,21 +1,3 @@
-# PBL SIMPADU MOBILE ADMIN PEGAWAI
+# admin_pegawai_bloc
 
-## Cara make
-
-> clone dulu repo nya
-
-```terminalOutput
-git clone https://github.com/akufarish/pbl-simpadu-admin-pegawai.git admin_pegawai
-```
-
-> install dependency
-
-```terminalOutput
-flutter pub get
-```
-
-> jalankan project flutter
-
-```terminalOutput
-flutter run
-```
+A new Flutter project.

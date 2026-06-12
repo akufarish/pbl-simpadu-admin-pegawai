@@ -1,0 +1,54 @@
+import 'package:admin_pegawai_bloc/core/error_handler.dart';
+import 'package:admin_pegawai_bloc/core/log.dart';
+import 'package:admin_pegawai_bloc/core/token_manager.dart';
+import 'package:admin_pegawai_bloc/features/auth/data/model/user_model.dart';
+import 'package:admin_pegawai_bloc/features/auth/data/remote/auth_remote.dart';
+import 'package:admin_pegawai_bloc/features/auth/domain/entities/user_entity.dart';
+import 'package:admin_pegawai_bloc/features/auth/domain/repository/auth_repository.dart';
+
+class AuthRepositoryImpl implements AuthRepository {
+  final AuthRemote authRemote;
+
+  AuthRepositoryImpl(this.authRemote);
+
+  @override
+  Future<LoginResponseEntity> login(LoginRequestEntity payload) async {
+    try {
+      final data = LoginRequest(
+        email: payload.email,
+        password: payload.password,
+      );
+      final response = await authRemote.login(data);
+
+      debugApi("login response", response);
+
+      if (response.data != null) {
+        await TokenManager.setToken(
+          response.data!.accessToken,
+          response.data!.refreshToken,
+        );
+
+        return response.data!;
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
+
+  @override
+  Future<UserResponseEntity> profile() async {
+    try {
+      final response = await authRemote.profile();
+
+      if (response.data != null) {
+        return response.data!;
+      } else {
+        throw ErrorHandler.handle(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
+}

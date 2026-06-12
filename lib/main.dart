@@ -1,52 +1,55 @@
-import 'package:admin_pegawai/providers/pegawai_provider.dart';
-import 'package:admin_pegawai/providers/user_provider.dart';
-import 'package:admin_pegawai/providers/verifikasi_provider.dart';
-import 'package:admin_pegawai/screens/auth_screen.dart';
-import 'package:admin_pegawai/screens/main_screen.dart';
-import 'package:admin_pegawai/screens/tambah_pegawai_screen.dart';
-import 'package:admin_pegawai/screens/ubah_password.dart';
-import 'package:admin_pegawai/utils/token_manager.dart';
+import 'package:admin_pegawai_bloc/core/di.dart';
+import 'package:admin_pegawai_bloc/core/token_manager.dart';
+import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:admin_pegawai_bloc/features/auth/presentation/screen/login_screen.dart';
+import 'package:admin_pegawai_bloc/features/dashboard/presentation/screen/main_screen.dart';
+import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load();
-  WidgetsFlutterBinding.ensureInitialized();
 
+  WidgetsFlutterBinding.ensureInitialized();
   String? token = await TokenManager.getAccessToken();
-  Widget screen = AuthScreen();
+  Widget screen = LoginScreen();
 
   if (token != null && !JwtDecoder.isExpired(token)) {
     screen = MainScreen();
   }
-
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => PegawaiProvider()),
-        ChangeNotifierProvider(create: (_) => VerifikasiProvider()),
-      ],
-      child: MainApp(screen: screen),
-    ),
-  );
+  setup();
+  runApp(MainApp(screen: screen));
 }
 
 class MainApp extends StatelessWidget {
   final Widget screen;
+
   const MainApp({super.key, required this.screen});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(body: screen),
-      routes: {
-        "/login": (context) => AuthScreen(),
-        "/dashboard": (context) => MainScreen(),
-        "/tambah-pegawai": (context) => TambahPegawai(),
-        "/ubah-password": (context) => UbahPassword(),
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit(getIt()),
+        ),
+        BlocProvider<PegawaiCubit>(
+          create: (BuildContext context) => PegawaiCubit(getIt()),
+        ),
+        BlocProvider<VerifikasiCubit>(
+          create: (BuildContext context) => VerifikasiCubit(getIt()),
+        ),
+      ],
+      child: MaterialApp(
+        home: screen,
+        routes: {
+          "login": (context) => LoginScreen(),
+          "dashboard": (context) => MainScreen(),
+        },
+      ),
     );
   }
 }

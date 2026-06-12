@@ -1,0 +1,7 @@
+import 'package:admin_pegawai_bloc/features/auth/domain/entities/user_entity.dart';
+
+abstract class AuthRepository {
+  Future<LoginResponseEntity> login(LoginRequestEntity payload);
+
+  Future<UserResponseEntity> profile();
+}
