@@ -17,10 +17,14 @@ import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifi
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final getIt = GetIt.instance;
 
 void setup() {
+  final String kelompok1Url = dotenv.get("KELOMPOK_1_BASE_URL");
+  final String kelompok2Url = dotenv.get("KELOMPOK_2_BASE_URL");
+
   final dio = Dio(
     BaseOptions(
       headers: {
@@ -63,19 +67,19 @@ void setup() {
   );
 
   getIt.registerSingleton<Dio>(dio);
-  getIt.registerFactory(() => AuthRemote(getIt()));
+  getIt.registerFactory(() => AuthRemote(getIt(), baseUrl: kelompok1Url));
   getIt.registerFactory<AuthRepository>(() => AuthRepositoryImpl(getIt()));
   getIt.registerFactory(() => AuthUsecase(authRepository: getIt()));
   getIt.registerFactory(() => AuthCubit(getIt()));
 
-  getIt.registerFactory(() => PegawaiRemote(getIt()));
+  getIt.registerFactory(() => PegawaiRemote(getIt(), baseUrl: kelompok2Url));
   getIt.registerFactory<PegawaiRepository>(
     () => PegawaiRepositoryImpl(getIt()),
   );
   getIt.registerFactory(() => PegawaiUsecase(getIt()));
   getIt.registerFactory(() => PegawaiCubit(getIt()));
 
-  getIt.registerFactory(() => VerifikasiRemote(getIt()));
+  getIt.registerFactory(() => VerifikasiRemote(getIt(), baseUrl: kelompok2Url));
   getIt.registerFactory<VerifikasiRepository>(
     () => VerifikasiRepositoryImpl(getIt()),
   );

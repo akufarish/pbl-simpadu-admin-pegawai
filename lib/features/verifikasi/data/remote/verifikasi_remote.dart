@@ -5,7 +5,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'verifikasi_remote.g.dart';
 
-@RestApi(baseUrl: "https://api-pegawai-4a.akufarish.my.id:1234")
+@RestApi()
 abstract class VerifikasiRemote {
   factory VerifikasiRemote(Dio dio, {String baseUrl}) = _VerifikasiRemote;
 

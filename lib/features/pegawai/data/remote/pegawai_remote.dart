@@ -5,7 +5,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'pegawai_remote.g.dart';
 
-@RestApi(baseUrl: "https://api-pegawai-4a.akufarish.my.id:1234")
+@RestApi()
 abstract class PegawaiRemote {
   factory PegawaiRemote(Dio dio, {String baseUrl}) = _PegawaiRemote;
 

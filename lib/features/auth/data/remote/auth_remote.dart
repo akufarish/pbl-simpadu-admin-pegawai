@@ -5,7 +5,7 @@ import 'package:retrofit/retrofit.dart';
 
 part 'auth_remote.g.dart';
 
-@RestApi(baseUrl: "https://be.karlearn.site")
+@RestApi()
 abstract class AuthRemote {
   factory AuthRemote(Dio dio, {String baseUrl}) = _AuthRemote;
 
