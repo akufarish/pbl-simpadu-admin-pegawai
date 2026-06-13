@@ -9,6 +9,11 @@ import 'package:admin_pegawai_bloc/features/pegawai/data/repository/pegawai_repo
 import 'package:admin_pegawai_bloc/features/pegawai/domain/repository/pegawai_repository.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/usecase/pegawai_usecase.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
+import 'package:admin_pegawai_bloc/features/presensi/data/remote/presensi_remote.dart';
+import 'package:admin_pegawai_bloc/features/presensi/data/repository/presensi_repository_impl.dart';
+import 'package:admin_pegawai_bloc/features/presensi/domain/repository/presensi_repository.dart';
+import 'package:admin_pegawai_bloc/features/presensi/domain/usecase/presensi_usecase.dart';
+import 'package:admin_pegawai_bloc/features/presensi/presentation/cubit/presensi_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/data/remote/verifikasi_remote.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/data/repository/verifikasi_repository_impl.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/domain/repository/verifikasi_repository.dart';
@@ -67,11 +72,13 @@ void setup() {
   );
 
   getIt.registerSingleton<Dio>(dio);
+  // feature auth
   getIt.registerFactory(() => AuthRemote(getIt(), baseUrl: kelompok1Url));
   getIt.registerFactory<AuthRepository>(() => AuthRepositoryImpl(getIt()));
   getIt.registerFactory(() => AuthUsecase(authRepository: getIt()));
   getIt.registerFactory(() => AuthCubit(getIt()));
 
+  // feature pegawai
   getIt.registerFactory(() => PegawaiRemote(getIt(), baseUrl: kelompok2Url));
   getIt.registerFactory<PegawaiRepository>(
     () => PegawaiRepositoryImpl(getIt()),
@@ -79,10 +86,19 @@ void setup() {
   getIt.registerFactory(() => PegawaiUsecase(getIt()));
   getIt.registerFactory(() => PegawaiCubit(getIt()));
 
+  // feature verifikasi
   getIt.registerFactory(() => VerifikasiRemote(getIt(), baseUrl: kelompok2Url));
   getIt.registerFactory<VerifikasiRepository>(
     () => VerifikasiRepositoryImpl(getIt()),
   );
   getIt.registerFactory(() => VerifikasiUsecase(getIt()));
   getIt.registerFactory(() => VerifikasiCubit(getIt()));
+
+  // feature presensi
+  getIt.registerFactory(() => PresensiRemote(getIt(), baseUrl: kelompok1Url));
+  getIt.registerFactory<PresensiRepository>(
+    () => PresensiRepositoryImpl(getIt()),
+  );
+  getIt.registerFactory(() => PresensiUsecase(getIt()));
+  getIt.registerFactory(() => PresensiCubit(getIt()));
 }

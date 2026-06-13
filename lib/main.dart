@@ -4,6 +4,7 @@ import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.d
 import 'package:admin_pegawai_bloc/features/auth/presentation/screen/login_screen.dart';
 import 'package:admin_pegawai_bloc/features/dashboard/presentation/screen/main_screen.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
+import 'package:admin_pegawai_bloc/features/presensi/presentation/cubit/presensi_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<VerifikasiCubit>(
           create: (BuildContext context) => VerifikasiCubit(getIt()),
+        ),
+        BlocProvider<PresensiCubit>(
+          create: (BuildContext context) => PresensiCubit(getIt()),
         ),
       ],
       child: MaterialApp(
