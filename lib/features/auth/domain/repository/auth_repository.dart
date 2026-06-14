@@ -6,4 +6,6 @@ abstract class AuthRepository {
   Future<UserResponseEntity> profile();
 
   Future<bool> logout();
+
+  Future<void> register(RegisterRequestEntity payload);
 }

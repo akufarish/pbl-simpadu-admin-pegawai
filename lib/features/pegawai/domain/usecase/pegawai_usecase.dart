@@ -13,4 +13,10 @@ class PegawaiUsecase {
   Future<PegawaiCountEntity> getTotalPegawai() async {
     return pegawaiRepository.getTotalPegawai();
   }
+
+  Future<PegawaiResponseEntity> createPegawai(
+    PegawaiRequestEntity payload,
+  ) async {
+    return pegawaiRepository.createPegawai(payload);
+  }
 }

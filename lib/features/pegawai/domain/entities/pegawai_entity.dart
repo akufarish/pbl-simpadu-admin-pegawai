@@ -1,3 +1,5 @@
+import 'package:admin_pegawai_bloc/features/pegawai/data/model/pegawai_model.dart';
+
 class PegawaiResponseEntity {
   final String id;
   final String nip;
@@ -51,4 +53,27 @@ class PegawaiCountEntity {
   final int totalEmployee;
 
   PegawaiCountEntity({required this.totalEmployee});
+}
+
+class PegawaiRequestEntity {
+  final String nip;
+  final String nik;
+  final String employeeName;
+  final String citizenCode;
+
+  PegawaiRequestEntity({
+    required this.nip,
+    required this.nik,
+    required this.employeeName,
+    required this.citizenCode,
+  });
+
+  PegawaiRequest toModel() {
+    return PegawaiRequest(
+      nip: nip,
+      nik: nik,
+      employeeName: employeeName,
+      citizenCode: citizenCode,
+    );
+  }
 }

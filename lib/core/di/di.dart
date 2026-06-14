@@ -75,7 +75,9 @@ void setup() {
   // feature auth
   getIt.registerFactory(() => AuthRemote(getIt(), baseUrl: kelompok1Url));
   getIt.registerFactory<AuthRepository>(() => AuthRepositoryImpl(getIt()));
-  getIt.registerFactory(() => AuthUsecase(authRepository: getIt()));
+  getIt.registerFactory<AuthUsecase>(
+    () => AuthUsecase(authRepository: getIt()),
+  );
   getIt.registerFactory(() => AuthCubit(getIt()));
 
   // feature pegawai
@@ -83,15 +85,17 @@ void setup() {
   getIt.registerFactory<PegawaiRepository>(
     () => PegawaiRepositoryImpl(getIt()),
   );
-  getIt.registerFactory(() => PegawaiUsecase(getIt()));
-  getIt.registerFactory(() => PegawaiCubit(getIt()));
+  getIt.registerFactory<PegawaiUsecase>(() => PegawaiUsecase(getIt()));
+  getIt.registerFactory(
+    () => PegawaiCubit(authUsecase: getIt(), pegawaiUsecase: getIt()),
+  );
 
   // feature verifikasi
   getIt.registerFactory(() => VerifikasiRemote(getIt(), baseUrl: kelompok2Url));
   getIt.registerFactory<VerifikasiRepository>(
     () => VerifikasiRepositoryImpl(getIt()),
   );
-  getIt.registerFactory(() => VerifikasiUsecase(getIt()));
+  getIt.registerFactory<VerifikasiUsecase>(() => VerifikasiUsecase(getIt()));
   getIt.registerFactory(() => VerifikasiCubit(getIt()));
 
   // feature presensi
@@ -99,6 +103,6 @@ void setup() {
   getIt.registerFactory<PresensiRepository>(
     () => PresensiRepositoryImpl(getIt()),
   );
-  getIt.registerFactory(() => PresensiUsecase(getIt()));
+  getIt.registerFactory<PresensiUsecase>(() => PresensiUsecase(getIt()));
   getIt.registerFactory(() => PresensiCubit(getIt()));
 }

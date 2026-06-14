@@ -42,3 +42,27 @@ class UserResponse extends UserResponseEntity {
 
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 }
+
+@JsonSerializable()
+class RegisterRequest {
+  final String name;
+  final String email;
+  final String password;
+  @JsonKey(name: "role_name")
+  final String roleName;
+  @JsonKey(name: "detail_id")
+  final String detailId;
+
+  RegisterRequest({
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.roleName,
+    required this.detailId,
+  });
+
+  factory RegisterRequest.fromJson(Map<String, dynamic> json) =>
+      _$RegisterRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegisterRequestToJson(this);
+}

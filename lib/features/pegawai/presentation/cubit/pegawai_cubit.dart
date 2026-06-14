@@ -1,3 +1,5 @@
+import 'package:admin_pegawai_bloc/features/auth/domain/entities/user_entity.dart';
+import 'package:admin_pegawai_bloc/features/auth/domain/usecase/auth_usecase.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/entities/pegawai_entity.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/domain/usecase/pegawai_usecase.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,10 @@ part 'pegawai_state.dart';
 
 class PegawaiCubit extends Cubit<PegawaiState> {
   final PegawaiUsecase pegawaiUsecase;
+  final AuthUsecase authUsecase;
 
-  PegawaiCubit(this.pegawaiUsecase) : super(PegawaiInitial());
+  PegawaiCubit({required this.pegawaiUsecase, required this.authUsecase})
+    : super(PegawaiInitial());
 
   Future<void> getDataPegawai() async {
     emit(PegawaiLoading());
@@ -43,6 +47,24 @@ class PegawaiCubit extends Cubit<PegawaiState> {
 
         emit(currentState.copyWith(foundPegawai: filteredList));
       }
+    }
+  }
+
+  void createPegawai(PegawaiRequestEntity payload) async {
+    emit(PegawaiCreateLoading());
+    try {
+      final result = await pegawaiUsecase.createPegawai(payload);
+      final registerRequest = RegisterRequestEntity(
+        name: result.employeeName,
+        email: "${result.nip}@dosen.com",
+        password: result.nip,
+        roleName: "dosen",
+        detailId: result.id,
+      );
+      await authUsecase.register(registerRequest);
+      emit(PegawaiCreateSuccess(result));
+    } catch (e) {
+      emit(PegawaiCreateError(e.toString().replaceAll("Exception:", "")));
     }
   }
 }

@@ -73,3 +73,19 @@ PegawaiCount _$PegawaiCountFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$PegawaiCountToJson(PegawaiCount instance) =>
     <String, dynamic>{'total_employee': instance.totalEmployee};
+
+PegawaiRequest _$PegawaiRequestFromJson(Map<String, dynamic> json) =>
+    PegawaiRequest(
+      nip: json['nip'] as String,
+      nik: json['nik'] as String,
+      employeeName: json['employee_name'] as String,
+      citizenCode: json['citizen_code'] as String,
+    );
+
+Map<String, dynamic> _$PegawaiRequestToJson(PegawaiRequest instance) =>
+    <String, dynamic>{
+      'nip': instance.nip,
+      'nik': instance.nik,
+      'employee_name': instance.employeeName,
+      'citizen_code': instance.citizenCode,
+    };

@@ -17,4 +17,7 @@ abstract class AuthRemote {
 
   @POST("/api/auth/logout")
   Future<ApiResponse> logout();
+
+  @POST("/api/users")
+  Future<ApiResponse<dynamic>> register(@Body() RegisterRequest payload);
 }

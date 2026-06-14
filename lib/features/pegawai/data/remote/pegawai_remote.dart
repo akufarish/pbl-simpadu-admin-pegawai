@@ -14,4 +14,9 @@ abstract class PegawaiRemote {
 
   @GET("/api/employees/info/count")
   Future<ApiResponse<PegawaiCount>> getTotalPegawai();
+
+  @POST("/api/employees")
+  Future<ApiResponse<PegawaiResponse>> createPegawai(
+    @Body() PegawaiRequest payload,
+  );
 }

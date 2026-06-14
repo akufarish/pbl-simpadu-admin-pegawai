@@ -33,4 +33,16 @@ class PegawaiRepositoryImpl implements PegawaiRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<PegawaiResponseEntity> createPegawai(
+    PegawaiRequestEntity payload,
+  ) async {
+    try {
+      final response = await pegawaiRemote.createPegawai(payload.toModel());
+      return response.data!;
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }

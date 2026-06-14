@@ -71,3 +71,18 @@ class DomisiliConverter
     return {"id": object.id, "code": object.code, "name": object.name};
   }
 }
+
+@JsonSerializable(fieldRename: FieldRename.snake)
+class PegawaiRequest extends PegawaiRequestEntity {
+  PegawaiRequest({
+    required super.nip,
+    required super.nik,
+    required super.employeeName,
+    required super.citizenCode,
+  });
+
+  factory PegawaiRequest.fromJson(Map<String, dynamic> json) =>
+      _$PegawaiRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PegawaiRequestToJson(this);
+}

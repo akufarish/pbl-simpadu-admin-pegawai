@@ -81,4 +81,18 @@ class AuthRepositoryImpl implements AuthRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<void> register(RegisterRequestEntity payload) async {
+    try {
+      final response = await authRemote.register(payload.toModel());
+      if (response.success == true) {
+        return response.data;
+      } else {
+        throw ErrorHandler.handle(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }

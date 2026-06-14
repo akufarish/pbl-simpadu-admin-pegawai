@@ -17,4 +17,8 @@ class AuthUsecase {
   Future<bool> logout() async {
     return await authRepository.logout();
   }
+
+  Future<void> register(RegisterRequestEntity payload) async {
+    return await authRepository.register(payload);
+  }
 }

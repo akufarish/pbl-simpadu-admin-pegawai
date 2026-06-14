@@ -4,4 +4,6 @@ abstract class PegawaiRepository {
   Future<PegawaiCountEntity> getTotalPegawai();
 
   Future<List<PegawaiResponseEntity>> getDataPegawai();
+
+  Future<PegawaiResponseEntity> createPegawai(PegawaiRequestEntity payload);
 }

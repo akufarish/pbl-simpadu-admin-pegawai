@@ -79,7 +79,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                       SizedBox(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/tambah-pegawai");
+                            Navigator.pushNamed(context, "tambah-pegawai");
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

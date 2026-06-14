@@ -43,3 +43,18 @@ class PegawaiCountError extends PegawaiState {
   final String errorMessage;
   PegawaiCountError(this.errorMessage);
 }
+
+class PegawaiCreateInitial extends PegawaiState {}
+
+class PegawaiCreateLoading extends PegawaiState {}
+
+class PegawaiCreateSuccess extends PegawaiState {
+  final PegawaiResponseEntity dataPegawai;
+
+  PegawaiCreateSuccess(this.dataPegawai);
+}
+
+class PegawaiCreateError extends PegawaiState {
+  final String errorMessage;
+  PegawaiCreateError(this.errorMessage);
+}
