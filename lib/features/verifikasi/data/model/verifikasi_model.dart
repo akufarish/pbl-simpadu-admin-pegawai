@@ -68,3 +68,13 @@ class UpdateVerifikasiRequest extends UpdateVerifikasiRequestEntity {
 
   Map<String, dynamic> toJson() => _$UpdateVerifikasiRequestToJson(this);
 }
+
+@JsonSerializable()
+class TotalVerifikasiPending extends TotalVerifikasiPendingEntity {
+  TotalVerifikasiPending(@JsonKey(name: "total_pending") super.totalPending);
+
+  factory TotalVerifikasiPending.fromJson(Map<String, dynamic> json) =>
+      _$TotalVerifikasiPendingFromJson(json);
+
+  Map<String, dynamic> toJson() => _$TotalVerifikasiPendingToJson(this);
+}

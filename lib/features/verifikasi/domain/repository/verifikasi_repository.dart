@@ -7,4 +7,6 @@ abstract class VerifikasiRepository {
     String id,
     UpdateVerifikasiRequestEntity payload,
   );
+
+  Future<TotalVerifikasiPendingEntity> getTotalVerifikasiPending();
 }

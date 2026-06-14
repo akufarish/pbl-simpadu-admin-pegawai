@@ -16,4 +16,8 @@ class VerifikasiUsecase {
   ) async {
     return await verifikasiRepository.updateVerifikasi(id, payload);
   }
+
+  Future<TotalVerifikasiPendingEntity> getTotalVerifikasiPending() async {
+    return await verifikasiRepository.getTotalVerifikasiPending();
+  }
 }

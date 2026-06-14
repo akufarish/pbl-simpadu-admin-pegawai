@@ -37,3 +37,11 @@ UpdateVerifikasiRequest _$UpdateVerifikasiRequestFromJson(
 Map<String, dynamic> _$UpdateVerifikasiRequestToJson(
   UpdateVerifikasiRequest instance,
 ) => <String, dynamic>{'status': instance.status};
+
+TotalVerifikasiPending _$TotalVerifikasiPendingFromJson(
+  Map<String, dynamic> json,
+) => TotalVerifikasiPending((json['total_pending'] as num).toInt());
+
+Map<String, dynamic> _$TotalVerifikasiPendingToJson(
+  TotalVerifikasiPending instance,
+) => <String, dynamic>{'total_pending': instance.totalPending};

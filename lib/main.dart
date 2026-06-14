@@ -6,6 +6,7 @@ import 'package:admin_pegawai_bloc/features/dashboard/presentation/screen/main_s
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/screen/tambah_pegawai_screen.dart';
 import 'package:admin_pegawai_bloc/features/presensi/presentation/cubit/presensi_cubit.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_count_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<PresensiCubit>(
           create: (BuildContext context) => PresensiCubit(getIt()),
+        ),
+        BlocProvider<VerifikasiCountCubit>(
+          create: (BuildContext context) => VerifikasiCountCubit(getIt()),
         ),
       ],
       child: MaterialApp(

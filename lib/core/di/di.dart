@@ -18,6 +18,7 @@ import 'package:admin_pegawai_bloc/features/verifikasi/data/remote/verifikasi_re
 import 'package:admin_pegawai_bloc/features/verifikasi/data/repository/verifikasi_repository_impl.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/domain/repository/verifikasi_repository.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/domain/usecase/verifikasi_usecase.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_count_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -97,6 +98,7 @@ void setup() {
   );
   getIt.registerFactory<VerifikasiUsecase>(() => VerifikasiUsecase(getIt()));
   getIt.registerFactory(() => VerifikasiCubit(getIt()));
+  getIt.registerFactory(() => VerifikasiCountCubit(getIt()));
 
   // feature presensi
   getIt.registerFactory(() => PresensiRemote(getIt(), baseUrl: kelompok1Url));

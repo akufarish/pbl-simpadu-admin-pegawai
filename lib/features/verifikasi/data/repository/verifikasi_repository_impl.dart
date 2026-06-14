@@ -43,4 +43,18 @@ class VerifikasiRepositoryImpl implements VerifikasiRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<TotalVerifikasiPendingEntity> getTotalVerifikasiPending() async {
+    try {
+      final response = await verifikasiRemote.getTotalVerifikasiPending();
+      if (response.data != null) {
+        return response.data!;
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }

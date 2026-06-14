@@ -30,3 +30,9 @@ class UpdateVerifikasiRequestEntity {
     return UpdateVerifikasiRequest(status);
   }
 }
+
+class TotalVerifikasiPendingEntity {
+  final int totalPending;
+
+  TotalVerifikasiPendingEntity(this.totalPending);
+}

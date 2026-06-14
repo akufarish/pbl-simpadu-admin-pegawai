@@ -3,6 +3,7 @@ import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
 import 'package:admin_pegawai_bloc/features/presensi/presentation/cubit/presensi_cubit.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_count_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ class _DashboardState extends State<Dashboard> {
         context.read<PegawaiCubit>().getTotalPegawai();
         context.read<VerifikasiCubit>().getDataVerifikasi();
         context.read<PresensiCubit>().getTotalPresensiPegawai();
+        context.read<VerifikasiCountCubit>().getTotalPresensiPegawai();
       }
     });
   }
@@ -103,10 +105,33 @@ class _DashboardState extends State<Dashboard> {
                     return Center(child: Text("Samting wong"));
                   },
                 ),
-                CardCount(
-                  icon: Icons.check_circle_outline,
-                  label: "Pending",
-                  total: 2,
+                BlocBuilder<VerifikasiCountCubit, TotalVerifikasiState>(
+                  builder: (context, state) {
+                    if (state is TotalVerifikasiLoading) {
+                      return Skeletonizer(
+                        enabled: true,
+                        child: CardCount(
+                          icon: Icons.check_circle_outline,
+                          label: "Pending",
+                          total: 2,
+                        ),
+                      );
+                    }
+
+                    if (state is TotalVerifikasiSuccess) {
+                      return CardCount(
+                        icon: Icons.person,
+                        label: "Pending",
+                        total: state.dataVerifikasi,
+                      );
+                    }
+
+                    if (state is TotalVerifikasiError) {
+                      return Center(child: Text(state.errorMessage));
+                    }
+
+                    return Center(child: Text("Samting wong"));
+                  },
                 ),
                 CardCount(
                   icon: Icons.file_open,

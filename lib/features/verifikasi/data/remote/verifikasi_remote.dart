@@ -17,4 +17,7 @@ abstract class VerifikasiRemote {
     @Path("id") String id,
     @Body() UpdateVerifikasiRequest payload,
   );
+
+  @GET("/api/change-requests/info/pending")
+  Future<ApiResponse<TotalVerifikasiPending>> getTotalVerifikasiPending();
 }
