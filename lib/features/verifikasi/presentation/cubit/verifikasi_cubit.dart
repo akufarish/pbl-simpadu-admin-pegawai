@@ -19,4 +19,17 @@ class VerifikasiCubit extends Cubit<VerifikasiState> {
       emit(VerifikasiError(e.toString().replaceAll("Exception:", "")));
     }
   }
+
+  Future<void> updateVerifikasi(
+    String id,
+    UpdateVerifikasiRequestEntity payload,
+  ) async {
+    emit(UpdateVerifikasiLoading());
+    try {
+      final result = await verifikasiUsecase.updateVerifikasi(id, payload);
+      emit(UpdateVerifikasiSuccess(result));
+    } catch (e) {
+      emit(UpdateVerifikasiError(e.toString().replaceAll("Exception:", "")));
+    }
+  }
 }

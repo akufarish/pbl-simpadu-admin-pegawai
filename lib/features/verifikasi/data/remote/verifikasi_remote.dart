@@ -11,4 +11,10 @@ abstract class VerifikasiRemote {
 
   @GET("/api/change-requests")
   Future<ApiResponse<List<VerifikasiModel>>> getDataVerifikasi();
+
+  @PUT("/api/change-requests/{id}")
+  Future<ApiResponse<VerifikasiModel>> updateVerifikasi(
+    @Path("id") String id,
+    @Body() UpdateVerifikasiRequest payload,
+  );
 }

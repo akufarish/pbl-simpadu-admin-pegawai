@@ -29,3 +29,11 @@ Map<String, dynamic> _$VerifikasiModelToJson(VerifikasiModel instance) =>
       'employee_id': instance.employeeId,
       'employee': const PegawaiConverter().toJson(instance.employee),
     };
+
+UpdateVerifikasiRequest _$UpdateVerifikasiRequestFromJson(
+  Map<String, dynamic> json,
+) => UpdateVerifikasiRequest(json['status'] as String);
+
+Map<String, dynamic> _$UpdateVerifikasiRequestToJson(
+  UpdateVerifikasiRequest instance,
+) => <String, dynamic>{'status': instance.status};

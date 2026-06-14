@@ -1,5 +1,6 @@
 import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/presentation/screen/detail_verifikasi_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -66,14 +67,26 @@ class _VerifikasiScreenState extends State<VerifikasiScreen> {
                 padding: EdgeInsets.fromLTRB(23, 22, 23, 20),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    final dosen = state.dataVerifikasi[index];
+                    final verifikasi = state.dataVerifikasi[index];
                     return Padding(
                       padding: EdgeInsets.only(bottom: 16),
-                      child: VerifikasiCard(
-                        nama: dosen.employee.employeeName,
-                        label: dosen.fieldName,
-                        status: dosen.status,
-                        value: dosen.newValue!,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DetailVerifikasiScreen(
+                                verifikasiEntity: verifikasi,
+                              ),
+                            ),
+                          );
+                        },
+                        child: VerifikasiCard(
+                          nama: verifikasi.employee.employeeName,
+                          label: verifikasi.fieldName,
+                          status: verifikasi.status,
+                          value: verifikasi.newValue!,
+                        ),
                       ),
                     );
                   }, childCount: state.dataVerifikasi.length),

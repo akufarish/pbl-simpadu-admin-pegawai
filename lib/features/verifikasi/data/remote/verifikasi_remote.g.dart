@@ -55,6 +55,40 @@ class _VerifikasiRemote implements VerifikasiRemote {
     return _value;
   }
 
+  @override
+  Future<ApiResponse<VerifikasiModel>> updateVerifikasi(
+    String id,
+    UpdateVerifikasiRequest payload,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(payload.toJson());
+    final _options = _setStreamType<ApiResponse<VerifikasiModel>>(
+      Options(method: 'PUT', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/change-requests/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponse<VerifikasiModel> _value;
+    try {
+      _value = ApiResponse<VerifikasiModel>.fromJson(
+        _result.data!,
+        (json) => VerifikasiModel.fromJson(json as Map<String, dynamic>),
+      );
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

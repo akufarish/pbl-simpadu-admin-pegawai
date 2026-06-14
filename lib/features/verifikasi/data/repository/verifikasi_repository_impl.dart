@@ -22,4 +22,25 @@ class VerifikasiRepositoryImpl implements VerifikasiRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<VerifikasiEntity> updateVerifikasi(
+    String id,
+    UpdateVerifikasiRequestEntity payload,
+  ) async {
+    try {
+      final response = await verifikasiRemote.updateVerifikasi(
+        id,
+        payload.toModel(),
+      );
+
+      if (response.data != null) {
+        return response.data!;
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }

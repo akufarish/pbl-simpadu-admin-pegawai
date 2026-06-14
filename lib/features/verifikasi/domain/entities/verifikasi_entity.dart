@@ -1,4 +1,5 @@
 import 'package:admin_pegawai_bloc/features/pegawai/domain/entities/pegawai_entity.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/data/model/verifikasi_model.dart';
 
 class VerifikasiEntity {
   final String id;
@@ -18,4 +19,14 @@ class VerifikasiEntity {
     required this.employeeId,
     required this.employee,
   });
+}
+
+class UpdateVerifikasiRequestEntity {
+  final String status;
+
+  UpdateVerifikasiRequestEntity(this.status);
+
+  UpdateVerifikasiRequest toModel() {
+    return UpdateVerifikasiRequest(status);
+  }
 }

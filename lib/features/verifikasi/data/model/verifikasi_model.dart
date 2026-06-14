@@ -58,3 +58,13 @@ class PegawaiConverter
     };
   }
 }
+
+@JsonSerializable()
+class UpdateVerifikasiRequest extends UpdateVerifikasiRequestEntity {
+  UpdateVerifikasiRequest(super.status);
+
+  factory UpdateVerifikasiRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdateVerifikasiRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateVerifikasiRequestToJson(this);
+}

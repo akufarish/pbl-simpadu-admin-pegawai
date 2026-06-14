@@ -9,4 +9,11 @@ class VerifikasiUsecase {
   Future<List<VerifikasiEntity>> getDataVerifikasi() async {
     return await verifikasiRepository.getDataVerifikasi();
   }
+
+  Future<VerifikasiEntity> updateVerifikasi(
+    String id,
+    UpdateVerifikasiRequestEntity payload,
+  ) async {
+    return await verifikasiRepository.updateVerifikasi(id, payload);
+  }
 }
