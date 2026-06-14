@@ -120,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
 
                     if (state is TotalVerifikasiSuccess) {
                       return CardCount(
-                        icon: Icons.person,
+                        icon: Icons.check_circle_outline,
                         label: "Pending",
                         total: state.dataVerifikasi,
                       );
@@ -153,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
 
                     if (state is TotalPresensiSuccess) {
                       return CardCount(
-                        icon: Icons.person,
+                        icon: Icons.person_add_alt_1,
                         label: "Presensi",
                         total: state.totalPresensi,
                       );
