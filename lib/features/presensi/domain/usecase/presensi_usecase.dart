@@ -9,4 +9,8 @@ class PresensiUsecase {
   Future<PresensiResponseEntity> getDataPresensi() async {
     return presensiRepository.getDataPresensi();
   }
+
+  Future<int> getTotalPresensiPegawai() async {
+    return presensiRepository.getTotalPresensiPegawai();
+  }
 }

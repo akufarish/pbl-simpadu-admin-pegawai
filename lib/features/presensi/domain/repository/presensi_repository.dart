@@ -2,4 +2,6 @@ import 'package:admin_pegawai_bloc/features/presensi/domain/entities/presensi_en
 
 abstract class PresensiRepository {
   Future<PresensiResponseEntity> getDataPresensi();
+
+  Future<int> getTotalPresensiPegawai();
 }

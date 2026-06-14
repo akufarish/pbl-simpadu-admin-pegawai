@@ -2,6 +2,7 @@ import 'package:admin_pegawai_bloc/core/constants/app_colors.dart';
 import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
 import 'package:admin_pegawai_bloc/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:admin_pegawai_bloc/features/pegawai/presentation/cubit/pegawai_cubit.dart';
+import 'package:admin_pegawai_bloc/features/presensi/presentation/cubit/presensi_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,6 +23,7 @@ class _DashboardState extends State<Dashboard> {
         context.read<AuthCubit>().profile();
         context.read<PegawaiCubit>().getTotalPegawai();
         context.read<VerifikasiCubit>().getDataVerifikasi();
+        context.read<PresensiCubit>().getTotalPresensiPegawai();
       }
     });
   }
@@ -111,10 +113,33 @@ class _DashboardState extends State<Dashboard> {
                   label: "Laporan Masuk",
                   total: 10,
                 ),
-                CardCount(
-                  icon: Icons.person_add_alt_1,
-                  label: "Presensi",
-                  total: 90,
+                BlocBuilder<PresensiCubit, PresensiState>(
+                  builder: (context, state) {
+                    if (state is TotalPresensiLoading) {
+                      return Skeletonizer(
+                        enabled: true,
+                        child: CardCount(
+                          icon: Icons.check_circle_outline,
+                          label: "Pending",
+                          total: 2,
+                        ),
+                      );
+                    }
+
+                    if (state is TotalPresensiSuccess) {
+                      return CardCount(
+                        icon: Icons.person,
+                        label: "Presensi",
+                        total: state.totalPresensi,
+                      );
+                    }
+
+                    if (state is TotalPresensiError) {
+                      return Center(child: Text(state.errorMessage));
+                    }
+
+                    return Center(child: Text("Samting wong"));
+                  },
                 ),
               ],
             ),

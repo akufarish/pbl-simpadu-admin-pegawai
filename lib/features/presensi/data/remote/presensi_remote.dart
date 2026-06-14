@@ -11,4 +11,7 @@ abstract class PresensiRemote {
 
   @GET("/api/presensi/pegawai")
   Future<ApiResponse<PresensiResponse>> getDataPresensi();
+
+  @GET("/api/presensi/count?tipe=pegawai")
+  Future<ApiResponse<int>> getTotalPresensiPegawai();
 }

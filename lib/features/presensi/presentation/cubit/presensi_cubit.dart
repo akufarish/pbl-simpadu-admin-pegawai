@@ -19,4 +19,14 @@ class PresensiCubit extends Cubit<PresensiState> {
       emit(PresensiError(e.toString().replaceAll("Exception:", "")));
     }
   }
+
+  Future<void> getTotalPresensiPegawai() async {
+    emit(TotalPresensiLoading());
+    try {
+      final result = await presensiUsecase.getTotalPresensiPegawai();
+      emit(TotalPresensiSuccess(result));
+    } catch (e) {
+      emit(TotalPresensiError(e.toString().replaceAll("Exception:", "")));
+    }
+  }
 }

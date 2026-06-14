@@ -22,4 +22,18 @@ class PresensiRepositoryImpl implements PresensiRepository {
       throw ErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<int> getTotalPresensiPegawai() async {
+    try {
+      final response = await presensiRemote.getTotalPresensiPegawai();
+      if (response.data != null) {
+        return response.data!;
+      } else {
+        throw Exception(response.message);
+      }
+    } catch (e) {
+      throw ErrorHandler.handle(e);
+    }
+  }
 }
