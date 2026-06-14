@@ -42,7 +42,7 @@ class _DetailVerifikasiScreenState extends State<DetailVerifikasiScreen> {
         title: const Text("Detail & Verifikasi"),
         leading: BackButton(onPressed: () => Navigator.pop(context)),
       ),
-      // 1. Dengarkan state perubahan update (Success / Error) via BlocListener
+
       body: BlocListener<VerifikasiCubit, VerifikasiState>(
         listener: (context, state) {
           if (state is UpdateVerifikasiSuccess) {
@@ -59,11 +59,8 @@ class _DetailVerifikasiScreenState extends State<DetailVerifikasiScreen> {
                 actions: [
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context); // Tutup dialog
-                      Navigator.pop(
-                        context,
-                        true,
-                      ); // Kembali ke list & kirim sinyal 'true' untuk refresh data
+                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     },
                     child: const Text("Ok"),
                   ),
@@ -73,9 +70,7 @@ class _DetailVerifikasiScreenState extends State<DetailVerifikasiScreen> {
           } else if (state is UpdateVerifikasiError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(
-                  state.errorMessage,
-                ), // Sesuaikan jika propertimu state.errorMessage
+                content: Text(state.errorMessage),
                 backgroundColor: Colors.red,
               ),
             );
@@ -203,7 +198,6 @@ class _DetailVerifikasiScreenState extends State<DetailVerifikasiScreen> {
     );
   }
 
-  // Widget pembantu untuk membuat field berpenampilan sama namun Read-Only
   Widget _buildReadOnlyField({
     required String label,
     required String value,
@@ -218,17 +212,15 @@ class _DetailVerifikasiScreenState extends State<DetailVerifikasiScreen> {
           const SizedBox(height: 10),
           TextFormField(
             initialValue: value,
-            readOnly: true, // Membuat input tidak bisa diketik
-            enabled:
-                false, // Membuat tampilannya sedikit memudar tanda terkunci
+            readOnly: true,
+            enabled: false,
             decoration: InputDecoration(
               prefixIcon: Icon(icon, color: Colors.black38),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
               filled: true,
-              fillColor:
-                  Colors.grey[100], // Background abu-abu tipis tanda terkunci
+              fillColor: Colors.grey[100],
             ),
             style: const TextStyle(color: Colors.black54),
           ),

@@ -1,4 +1,5 @@
 import 'package:admin_pegawai_bloc/core/components/verifikasi_card.dart';
+import 'package:admin_pegawai_bloc/features/verifikasi/domain/entities/verifikasi_entity.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/cubit/verifikasi_cubit.dart';
 import 'package:admin_pegawai_bloc/features/verifikasi/presentation/screen/detail_verifikasi_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,19 @@ class VerifikasiScreen extends StatefulWidget {
 }
 
 class _VerifikasiScreenState extends State<VerifikasiScreen> {
+  void _goToDetail(VerifikasiEntity data) async {
+    final shouldRefresh = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailVerifikasiScreen(verifikasiEntity: data),
+      ),
+    );
+
+    if (shouldRefresh == true && mounted) {
+      context.read<VerifikasiCubit>().getDataVerifikasi();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -71,16 +85,7 @@ class _VerifikasiScreenState extends State<VerifikasiScreen> {
                     return Padding(
                       padding: EdgeInsets.only(bottom: 16),
                       child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => DetailVerifikasiScreen(
-                                verifikasiEntity: verifikasi,
-                              ),
-                            ),
-                          );
-                        },
+                        onTap: () => _goToDetail(verifikasi),
                         child: VerifikasiCard(
                           nama: verifikasi.employee.employeeName,
                           label: verifikasi.fieldName,

@@ -78,8 +78,15 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                       ),
                       SizedBox(
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "tambah-pegawai");
+                          onPressed: () async {
+                            final nav = await Navigator.pushNamed(
+                              context,
+                              "tambah-pegawai",
+                            );
+
+                            if (nav == true && context.mounted) {
+                              context.read<PegawaiCubit>().getDataPegawai();
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
