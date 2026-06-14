@@ -1,10 +1,13 @@
 import 'package:admin_pegawai_bloc/core/errors/error_handler.dart';
+import 'package:admin_pegawai_bloc/core/network/api_response.dart';
 import 'package:admin_pegawai_bloc/core/utils/log.dart';
 import 'package:admin_pegawai_bloc/core/utils/token_manager.dart';
 import 'package:admin_pegawai_bloc/features/auth/data/model/user_model.dart';
 import 'package:admin_pegawai_bloc/features/auth/data/remote/auth_remote.dart';
 import 'package:admin_pegawai_bloc/features/auth/domain/entities/user_entity.dart';
 import 'package:admin_pegawai_bloc/features/auth/domain/repository/auth_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/rendering.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemote authRemote;
@@ -32,6 +35,17 @@ class AuthRepositoryImpl implements AuthRepository {
       } else {
         throw Exception(response.message);
       }
+    } on DioException catch (e) {
+      final errorResult = ApiResponse<dynamic>.fromJson(
+        e.response!.data,
+        (item) => item,
+      );
+
+      debugPrint("gagal login: ${errorResult.message}");
+
+      final errorDetail = errorResult.error;
+
+      throw Exception(errorDetail);
     } catch (e) {
       throw ErrorHandler.handle(e);
     }
